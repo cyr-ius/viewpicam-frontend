@@ -1,0 +1,27 @@
+<div class="row">Multiview
+  <small i18n>Add multiple camera display on same page <a routerLink="/multiview" target="_blank">View</a></small>
+</div>
+<div id="multiviews" class="row">
+    @if (multiviews){
+    @for (multiview of multiviews; track multiview.id){
+    <div class="row g-1 ms-2 uchange">
+        <div class="col-auto"><div class="form-check form-switch"><input class="form-check-input" name="state" type="checkbox" [checked]="multiview!.state"></div></div>
+        <div class="col"><input class="form-control form-control-sm" name="url" type="url" value="{{multiview!.url}}" required></div>
+        <div class="col"><input class="form-control form-control-sm" name="delay" type="number" value="{{multiview!.delay}}" required></div>
+        <div class="col-auto"><button class="btn btn-sm btn-danger delete" type="button" (click)="delete(multiview!.id)"><i class="bi bi-dash-square-fill"></i></button></div>
+    </div>
+    }
+    }
+    <form #multiviewForm="ngForm" (ngSubmit)="onSubmit(multiviewForm)" class="row g-1 ms-2 needs-validation" [ngClass]="{'was-validated':multiviewForm.form.touched}" novalidate>
+        <div class="col-auto"><div class="form-check form-switch"><input class="form-check-input" name="state" type="checkbox" [(ngModel)]="multiview!.state" [checked]="multiview!.state"></div></div>
+        <div class="col">
+          <input class="form-control form-control-sm" name="url" placeholder="http://192.168.1.1/cam/cam_pic?token=Bxxxxxxxxxxxxx" type="url" [(ngModel)]="multiview!.url" #url="ngModel" required>
+          <div [hidden]="url.valid || url.pristine"  class="invalid-feedback">Url is required</div>
+        </div>
+        <div class="col">
+          <input class="form-control form-control-sm" name="delay" placeholder="delay" type="number" required [(ngModel)]="multiview!.delay" #delay="ngModel">
+          <div [hidden]="delay.valid || delay.pristine"  class="invalid-feedback">Number is required</div>
+        </div>
+        <div class="col-auto"><button class="btn btn-sm btn-success add" type="submit" [disabled]="!multiviewForm.form.valid"><i class="bi bi-plus-square-fill"></i></button></div>
+    </form>
+</div>

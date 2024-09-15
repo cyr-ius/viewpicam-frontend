@@ -1,0 +1,24 @@
+<div #otpModal class="modal fade" id="otpModal" tabindex="-1" aria-labelledby="otpModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+  <form id="otp" #otpForm="ngForm" (ngSubmit)="onSubmit()">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="otpModalLabel">Please sign in</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="m-auto">
+              <div class="input-group mb-3">
+                  <span class="input-group-text"><i class="bi bi-shield-lock"></i></span>
+                  <input class="form-control" name="secret" placeholder="OTP Code" type="text" aria-label="Otpcode" required autofocus [(ngModel)]="secret">
+              </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="onCancel()">Cancel</button>
+        <button type="button" class="btn btn-primary" name="submit" type="submit" value="Sign in" [disabled]="!otpForm.form.valid">Save changes</button>
+      </div>
+    </div>
+  </form>
+  </div>
+</div>

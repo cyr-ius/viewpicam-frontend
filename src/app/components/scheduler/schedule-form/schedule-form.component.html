@@ -1,0 +1,34 @@
+@let scheduler = scheduler_day();
+<div class="row mt-5"><h4 class="p-0" i18n>Scheduler</h4></div>
+<hr class="p-0 ">
+<div id="period_scheduler" class="row mt-5">
+    <div class="row row-cols-2 row-cols-md text-center">
+        <span class="col-6 col-md" i18n>Period</span>
+        <span class="col-6 col-md" i18n>Mon - - Wed - - Sun</span>
+        <span class="col-4 col-md" i18n>Motion Start</span>
+        <span class="col-4 col-md" i18n>Motion Stop</span>
+        <span class="col-4 col-md" i18n>Period Start</span>
+    </div>
+    <form #form_schedule="ngForm" id="form_schedule" class="row">
+    @for (item of scheduler; track item.id) {
+      @if (item.daysmode.id == daymode()){
+      <div class="row row-cols-2 row-cols-md g-1">
+          <div class="col-2 col-md">{{item.period}}</div>
+          <div class="col-6 col-md text-center">
+                <input class="form-checkbox form-checkbox-sm" type="checkbox" name="scheduler[{{item.id}}]['calendar']['Mon']" [(ngModel)]="item.calendars.Mon">
+                <input class="form-checkbox form-checkbox-sm" type="checkbox" name="scheduler[{{item.id}}]['calendar']['Tue']" [(ngModel)]="item.calendars.Tue">
+                <input class="form-checkbox form-checkbox-sm" type="checkbox" name="scheduler[{{item.id}}]['calendar']['Wed']" [(ngModel)]="item.calendars.Wed">
+                <input class="form-checkbox form-checkbox-sm" type="checkbox" name="scheduler[{{item.id}}]['calendar']['Thu']" [(ngModel)]="item.calendars.Thu">
+                <input class="form-checkbox form-checkbox-sm" type="checkbox" name="scheduler[{{item.id}}]['calendar']['Fri']" [(ngModel)]="item.calendars.Fri">
+                <input class="form-checkbox form-checkbox-sm" type="checkbox" name="scheduler[{{item.id}}]['calendar']['Sat']" [(ngModel)]="item.calendars.Sat">
+                <input class="form-checkbox form-checkbox-sm" type="checkbox" name="scheduler[{{item.id}}]['calendar']['Sun']" [(ngModel)]="item.calendars.Sun">
+          </div>
+          <div class="col-2 col-md"><input class="form-control form-control-sm" type="text" name="scheduler[{{item.id}}]['command_on']" [(ngModel)]="item.command_on"></div>
+          <div class="col-2 col-md"><input class="form-control form-control-sm" type="text" name="scheduler[{{item.id}}]['command_off']" [(ngModel)]="item.command_off"></div>
+          <div class="col-8 col-md"><input class="form-control form-control-sm" type="text" name="scheduler[{{item.id}}]['mode']" [(ngModel)]="item.mode"></div>
+          <input type="hidden" name="scheduler[{{item.id}}]['id']" [(ngModel)]="item.id">
+      </div>
+      }
+    }
+    </form>
+</div>

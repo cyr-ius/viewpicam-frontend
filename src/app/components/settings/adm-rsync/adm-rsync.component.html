@@ -1,0 +1,32 @@
+@if (rsync){
+<div class="row">RSync</div>
+<div id="rsync" class="row">
+    <form #rsyncForm="ngForm" (ngSubmit)="onSubmit(rsyncForm)" class="row g-1 ms-2 needs-validation" [ngClass]="{'was-validated':rsyncForm.form.valid}">
+        <div class="col-auto"><div class="form-check form-switch"><input class="form-check-input uchange" name="rs_enabled" type="checkbox" [(ngModel)]="rsync!.rs_enabled"></div></div>
+        <div class="col"><input class="form-control form-control-sm" name="rs_user" type="text" i18n-placeholder placeholder="User" [(ngModel)]="rsync!.rs_user" required></div>
+        <div class="col"><input class="form-control form-control-sm" name="rs_pwd" type="password" i18n-placeholder placeholder="Password" [(ngModel)]="rsync!.rs_pwd" required></div>
+        <div class="col"><input class="form-control form-control-sm" name="rs_direction" type="text" i18n-placeholder placeholder="Remote Folder or Module" [(ngModel)]="rsync!.rs_direction" required></div>
+        <div class="col">
+            <select class="form-select form-select-sm" name="rs_mode" required [(ngModel)]="rsync!.rs_mode">
+                <option value="Module" [selected]="rsync!.rs_mode == 'Module'">Module</option>
+                <option value="SSH" [selected]="rsync!.rs_mode == 'SSH'">SSH</option>
+            </select>
+        </div>
+        <div class="col"><input class="form-control form-control-sm" name="rs_remote_host" type="text" i18n-placeholder placeholder="Remote Host" [(ngModel)]="rsync!.rs_remote_host" required></div>
+        <div class="col">
+            <select class="form-control form-control-sm" name="rs_options" [(ngModel)]="rsync!.rs_options" multiple data-multi-select>
+                <option value="-t">Times</option>
+                <option value="-b" >Backup</option>
+                <option value="-z" >Compress</option>
+                <option value="-a" >Archive</option>
+                <option value="--delete">Delete</option>
+                <option value="-q">Quiet</option>
+                <option value="-p">Preserve Permissions</option>
+                <option value="--delay-updates"> Delay Updates</option>
+            </select>
+        </div>
+        <div class="col-auto"><button class="btn btn-sm btn-outline-light" type="submit" i18n-title title="Save settings" [disabled]="!rsyncForm.form.valid"><i class="bi bi-floppy"></i></button></div>
+        <div class="col-auto"><button class="btn btn-sm btn-outline-light reset" type="button" i18n-title title="Reset settings" (click)="onReset(rsyncForm)"><i class="bi bi-arrow-repeat"></i></button></div>
+    </form>
+</div>
+}

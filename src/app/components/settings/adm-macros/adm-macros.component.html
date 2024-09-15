@@ -1,0 +1,11 @@
+<div class="row" i18n>Macros</div>
+<div id="macros" class="row">
+    @for (macro of macros; track $index){
+    <div class="row g-1 ms-2 uchange">
+        <div class="col-auto"><div class="form-check form-switch"><input class="form-check-input" name="state" [(ngModel)]="macro!.state" type="checkbox" (change)="onChange(macro.name,macro!.command,macro!.state)"></div></div>
+        <div class="col">{{macro.name | replace: '_':' '|titlecase}}</div>
+        <div class="col-6"><input class="form-control form-control-sm" type="text" name="command" [(ngModel)]="macro!.command"  (change)="onChange(macro.name,macro!.command,macro!.state)"></div>
+        <div class="col-auto"><button class="btn btn-sm btn-outline-secondary" type="button" (click)="sendCmd('sy',macro.command)" i18n>Execute</button></div>
+    </div>
+    }
+</div>

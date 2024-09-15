@@ -1,0 +1,5 @@
+<div class="container-fluid text-center">
+  @for (button of ubuttons | async ; track button) {
+    <button id="{{button.id}}" class="btn btn-sm {{button.css_class}}" type="button" onclick="sendCmd('sy',button.macro);" style="{{button.style}}" [hidden]="button.display">{{button.name}}</button>
+  }
+</div>

@@ -1,0 +1,92 @@
+import { Component, computed, ElementRef, OnInit, viewChild } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Thumb } from '../../../core/models/app-models';
+import { RaspiconfigService } from '../../../core/services/raspiconfig.service';
+import { ThumbsService } from '../../../core/services/thumbs.service';
+import { ThumbsListComponent } from '../thumbs-list.component';
+
+
+@Component({
+  selector: 'app-thumb-preview',
+  standalone: true,
+  imports: [ThumbsListComponent],
+  templateUrl: './thumb-preview.component.html'
+})
+export class ThumbPreviewComponent implements OnInit {
+
+  display_preview = computed(() => this.thumbsService.display_preview())
+  prevItem = computed<number>(() => this.searchIndex(this.thumbsService.list_thumbs(), this.thumbsService.current_thumb()!.id, -1))
+  nextItem = computed<number>(() => this.searchIndex(this.thumbsService.list_thumbs(), this.thumbsService.current_thumb()!.id, 1))
+  count = computed<number>(() => this.thumbsService.list_thumbs().length)
+
+  thumb = <Thumb>({})
+
+  video_detected: boolean = false
+  img_src: string|undefined = undefined
+  cam_src: string|undefined = undefined
+  video = viewChild<ElementRef>('video')
+
+  keys: string[] = []
+
+  constructor(
+    private activedRtoute: ActivatedRoute,
+    private thumbsService: ThumbsService,
+    private raspiConfig: RaspiconfigService,
+    private router: Router
+  ){}
+
+  ngOnInit(): void {
+    this.activedRtoute.paramMap.subscribe((data:any) => {
+      if (data.params.id) {
+        this.thumbsService.getThumbById(data.params.id).subscribe(
+        (rsp) => {
+          this.thumb = rsp;
+          this.display();
+        });
+      }
+    })
+  }
+
+  ngDestroy(){
+    this.thumbsService.setDisplayPreview(false)
+    this.thumbsService.setCurrentThumb(undefined)
+  }
+
+  prev(){
+    this.thumb = this.thumbsService.list_thumbs()![this.prevItem()]
+    this.router.navigate(['gallery',this.thumb.id])
+    this.display()
+  }
+
+  next(){
+    this.thumb = this.thumbsService.list_thumbs()![this.nextItem()]
+    this.router.navigate(['gallery',this.thumb.id])
+    this.display()
+  }
+
+  display(){
+    this.thumbsService.setDisplayPreview(true);
+    this.thumbsService.setCurrentThumb(this.thumb);
+    this.video_detected = this.thumb?.type == "v".toString() ? true : false
+
+    const media_path = this.raspiConfig.media_path()
+
+    if (this.video_detected && this.thumb){
+      if (this.video()){
+        this.video()!.nativeElement.src= `${media_path}/${this.thumb.realname}`;
+      } else {
+        this.cam_src = `${media_path}/${this.thumb.realname}`;
+      }
+    } else {
+      this.img_src = `${media_path}/${this.thumb?.realname}`;
+    }
+  }
+
+  searchIndex(thumbs: Thumb[]|undefined , id:string,  step: number): number{
+    let keys: string[] = []
+    thumbs?.forEach((item)=> keys.push(item.id))
+    let idx = keys.findIndex((element) => element == id)
+    return idx + (1 * step)
+  }
+
+}

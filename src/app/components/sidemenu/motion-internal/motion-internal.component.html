@@ -1,0 +1,70 @@
+<div id="motionInternal" class="offcanvas offcanvas-start offcanvas-size-xl" tabindex="-1" aria-labelledby="motionInternalLabel">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="motionInternalLabel">Motion Settings</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <hr/>
+    <div class="offcanvas-body">
+        <div class="row g-3">
+            <label class="col col-form-label">Motion Vector Preview:</label>
+            <div class="col">
+                <select name="preview_select" class="form-select form-select-sm" (change)="sendCmd('vp',raspiconfig().vector_preview)" [disabled]="preview_select_disable()" [(ngModel)]="raspiconfig().vector_preview">
+                    <option value="0">Off</option>
+                    <option value="1">On</option>
+                </select>
+            </div>
+        </div>
+        <div class="row g-3">
+            <label class="col col-form-label">Noise level (1-255 / >1000):</label>
+            <div class="col">
+                <input class="form-control form-control-sm" name="motion_noise" type="number" min="1" step="1" [(ngModel)]="raspiconfig().motion_noise" (change)="sendCmd('mn',raspiconfig()?.motion_noise);">
+            </div>
+        </div>
+        <div class="row g-3">
+            <label class="col col-form-label">Threshold (1-32000):</label>
+            <div class="col">
+                <input class="form-control form-control-sm" name="motion_threshold" type="number" min="1" max="32000" step="1" [(ngModel)]="raspiconfig().motion_threshold" (change)="sendCmd('mt',raspiconfig()?.motion_threshold);">
+            </div>
+        </div>
+        <div class="row g-3">
+            <label class="col col-form-label">Clipping factor (2-50), default 3:</label>
+            <div class="col">
+                <input class="form-control form-control-sm" name="motion_clip" type="number" min="2" max="50" step="1" [(ngModel)]="raspiconfig().motion_clip" (change)="sendCmd('mnmc',raspiconfig()?.motion_clip);">
+            </div>
+        </div>
+        <div class="row g-3">
+            <label class="col col-form-label">Mask Image:</label>
+            <div class="col">
+                <input class="form-control form-control-sm" name="motion_image" type="file">
+            </div>
+        </div>
+        <div class="row g-3">
+            <label class="col col-form-label">Delay Frames to detect:</label>
+            <div class="col">
+                <input class="form-control form-control-sm" name="motion_initframes" type="number" min="0" step="1" [(ngModel)]="raspiconfig().motion_initframes" (change)="sendCmd('ms',raspiconfig()?.motion_initframes);">
+            </div>
+        </div>
+        <div class="row g-3">
+            <label class="col col-form-label">Change Frames to start:</label>
+            <div class="col">
+                <input class="form-control form-control-sm" name="motion_startframes" type="number" min="0" step="1" [(ngModel)]="raspiconfig().motion_startframes" (change)="sendCmd('mb',raspiconfig()?.motion_startframes);">
+            </div>
+        </div>
+        <div class="row g-3">
+            <label class="col col-form-label">Still Frames to stop:</label>
+            <div class="col">
+                <input class="form-control form-control-sm" name="motion_stopframes" type="number" min="0" step="1" [(ngModel)]="raspiconfig().motion_stopframes" (change)="sendCmd('me',raspiconfig()?.motion_stopframes);">
+            </div>
+        </div>
+        <div class="row g-3">
+            <label class="col col-form-label">Save vectors to .dat:<br>(Uses more space)</label>
+            <div class="col">
+                <select class="form-select form-select-sm" (change)="sendCmd('mf',raspiconfig()?.motion_file);" name="motion_file" [(ngModel)]="raspiconfig().motion_file">
+                    <option value="0">Off</option>
+                    <option value="1">On</option>
+                </select>
+            </div>
+        </div>
+    </div>
+</div>
+

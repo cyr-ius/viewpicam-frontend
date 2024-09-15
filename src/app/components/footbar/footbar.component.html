@@ -1,0 +1,22 @@
+@if (current_user()) {
+<nav class="navbar navbar-expand fixed-bottom bg-body-tertiary">
+    <div class="container-fluid">
+        <ul id="footer-infos" class="navbar-nav d-none d-md-flex">
+            <li class="nav-item"><a class="nav-link" href="https://github.com/cyr-ius/viewpi-cam" target="_blank">Github</a></li>
+            <li class="nav-item"><a class="nav-link" href="http://www.raspberrypi.org/forums/viewtopic.php?f=43&amp;t=63276" target="_blank">Forum</a></li>
+            <li class="nav-item"><a class="nav-link" href="http://elinux.org/RPi-Cam-Web-Interface" target="_blank">Wiki</a></li>
+        </ul>
+        @if (gitVersion().update_available){
+        <div class="ms-auto me-1 d-none d-md-flex">
+          <span id="check-update" class="fs-6 fw-lighter"> New version detected, please restart to update to {{gitVersion().app_version}}</span>
+        </div>
+        } @else {
+        <div class="ms-auto me-1 d-none d-md-flex"><span id="check-update" class="fs-6 fw-lighter">{{gitVersion().app_version}}</span></div>
+        }
+        <div class="ms-auto me-1">
+        <app-theme-language></app-theme-language>
+        </div>
+        <app-theme-colors></app-theme-colors>
+    </div>
+</nav>
+}

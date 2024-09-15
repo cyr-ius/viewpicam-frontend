@@ -1,0 +1,23 @@
+.fullscreen {
+  position: absolute;
+  left: 0;
+  width: auto;
+  height: calc(100vh - 114px);
+  z-index: 1040;
+  right: 0;
+  margin: auto;
+}
+
+.img-fluid {
+  max-width: calc(100vh - 5%);
+  height: auto;
+}
+
+.standard {
+  width: 100%;
+}
+
+.video {
+  max-width: 800px;
+  height: auto;
+}

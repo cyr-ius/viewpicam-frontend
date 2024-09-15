@@ -1,0 +1,10 @@
+<div #toastlist class="toast-container bottom-0 end-0 translate-middle-x align-items-center">
+  @for(toast of toasts$(); track $index){
+    <div #toast class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="5000" data-bs-animation="true" data-bs-autohide="true">
+        <div class="d-flex">
+            <div class="toast-body">{{toast.message}}</div>
+            <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    </div>
+  }
+</div>

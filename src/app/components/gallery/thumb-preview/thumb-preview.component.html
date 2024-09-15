@@ -1,0 +1,24 @@
+@if (thumb && display_preview()){
+<div id="preview" class="text-center" style="position:relative">
+    <span id="media-title"></span>
+    <div id="media">
+      @if (video_detected) {
+      <video #video class="col-12 col-md-10 col-xl-8 col-xxl-4 video" controls="controls" preload="metadata">
+        <source [src]="cam_src" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+      }
+      @else {
+        <a [href]="img_src" target="_blank"><img class="col-12 col-md-10 col-xl-8 col-xxl-4" [src]="img_src"></a>
+      }
+    </div>
+    <button id="prev" class="carousel-control-prev" type="button" (click)="prev()" [hidden]="prevItem() < 0">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Prev</span>
+    </button>
+    <button id="next" class="carousel-control-next" type="button" (click)="next()" [hidden]="nextItem() > count() - 1">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+</div>
+}

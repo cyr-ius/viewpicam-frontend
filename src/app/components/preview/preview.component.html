@@ -1,0 +1,12 @@
+<app-motion-external></app-motion-external>
+<app-motion-internal></app-motion-internal>
+<app-camera-settings></app-camera-settings>
+<div class="container-fluid overflow-auto text-center">
+  <div>
+    <app-mjpeg-viewer></app-mjpeg-viewer>
+  </div>
+  <app-main-buttons [hidden]="!display_mode()"></app-main-buttons>
+  <app-user-buttons [hidden]="!ubuttons()"></app-user-buttons>
+  <app-pipan-buttons [hidden]="!pipan()"></app-pipan-buttons>
+</div>
+

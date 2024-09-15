@@ -1,0 +1,27 @@
+<div class="row" i18n>Users buttons</div>
+<div id="ubuttons" class="row">
+    @for(ubutton of userbuttons; track ubutton.id){
+    <div class="row g-1 ms-2 uchange">
+        <div class="col-2 col-auto">
+            <div class="form-check form-switch">
+                <input class="form-check-input" name="display" type="checkbox" [checked]="ubutton.display">
+            </div>
+        </div>
+        <div class="col-10 col-sm"><input class="form-control form-control-sm" name="name" i18n-placeholder placeholder="Name" type="text" value="{{ubutton.name}}"></div>
+        <div class="col-6 col-sm"><input class="form-control form-control-sm" name="macro" placeholder="Macro" type="text" value="{{ubutton.macro}}"></div>
+        <div class="col-6 col-sm"><input class="form-control form-control-sm" name="css_class" placeholder="class" type="text" value="{{ubutton.css_class}}"></div>
+        <div class="col-12 col-sm"><input class="form-control form-control-sm" name="style" placeholder="Style" type="text" value="{{ubutton.style}}"></div>
+        <div class="col-10 col-sm"><input class="form-control form-control-sm" name="other" i18n-placeholder placeholder="Other" type="text" value="{{ubutton.other}}"></div>
+        <div class="col-2 col-auto"><button class="btn btn-sm btn-danger delete" type="button" (click)="delete(ubutton.id)"><i class="bi bi-dash-square-fill"></i></button></div>
+    </div>
+    }
+    <form #userButtonsForm="ngForm" (ngSubmit)="onSubmit(userButtonsForm)" class="row g-1 ms-2">
+      <div class="col-2 col-auto"><div class="form-check form-switch"><input class="form-check-input" name="display" type="checkbox" [(ngModel)]="button!.display" [checked]="button!.display"></div></div>
+      <div class="col-10 col-sm"><input class="form-control form-control-sm" name="name" i18n-placeholder placeholder="Name" type="text" required [(ngModel)]="button!.name"></div>
+      <div class="col-6 col-sm"><input class="form-control form-control-sm" name="macro" placeholder="Macro" type="text" required [(ngModel)]="button!.macro"></div>
+      <div class="col-6 col-sm"><input class="form-control form-control-sm" name="css_class" placeholder="class" type="text" [(ngModel)]="button!.css_class"></div>
+      <div class="col-12 col-sm"><input class="form-control form-control-sm" name="style" placeholder="Style" type="text" [(ngModel)]="button!.style"></div>
+      <div class="col-10 col-sm"><input class="form-control form-control-sm" name="other" i18n-placeholder placeholder="Other" type="text" [(ngModel)]="button!.other"></div>
+      <div class="col-2 col-auto"><button class="btn btn-sm btn-success add" type="submit" [disabled]="!userButtonsForm.form.valid"><i class="bi bi-plus-square-fill"></i></button></div>
+    </form>
+</div>

@@ -1,0 +1,32 @@
+<div class="row" i18n>Users</div>
+<div id="users" class="row">
+    @for (user of users; track user.id) {
+    <div class="row g-1 ms-2 uchange">
+        <input type="hidden" name="id" value="{{user.id}}">
+        <div class="col-auto"><button class="btn btn-sm otp_user" [ngClass]="{'btn-outline-danger': user.otp_confirmed, 'btn-outline-success': !user.otp_confirmed}" type="button" (click)="otpCheckModal(user)"><i class="bi bi-shield-lock"></i></button></div>
+        <div class="col-10 col-sm"><input class="form-control form-control-sm" name="name" i18n-placeholder placeholder="Username" type="text" [(ngModel)]="user.name" (change)="onChange(user)" required></div>
+        <div class="col-6 col-sm"><input class="form-control form-control-sm" name="password" i18n-placeholder placeholder="Password" type="password" [(ngModel)]="user.password" (change)="onChange(user)"></div>
+        <div class="col-4 col-sm">
+            <select class="form-select form-select-sm" name="right" [(ngModel)]="user.right" (change)="onChange(user)" required>
+                @for (item of userlevel; track $index){
+                <option value="{{item.right}}">{{item.name| titlecase}}</option>
+                }
+            </select>
+        </div>
+        <div class="col-auto"><button class="btn btn-sm btn-danger delete" type="button" (click)="delete(user.id)"><i class="bi bi-dash-square-fill"></i></button></div>
+    </div>
+    }
+    <form #userForm="ngForm" (ngSubmit)="onSubmit(userForm)" class="row g-1 ms-2 needs-validation">
+        <div class="col-10 col-sm"><input class="form-control form-control-sm" name="name" i18n-placeholder placeholder="Username" type="text" required [(ngModel)]="user.name"></div>
+        <div class="col-6 col-sm"><input class="form-control form-control-sm" name="password" i18n-placeholder placeholder="Password" type="password" required [(ngModel)]="user.password"></div>
+        <div class="col-4 col-sm">
+            <select class="form-select form-select-sm" name="right" required [(ngModel)]="user.right">
+                @for (item of userlevel; track $index){
+                <option value="{{item.right}}">{{item.name| titlecase}}</option>
+                }
+            </select>
+        </div>
+        <div class="col-auto"><button class="btn btn-sm btn-success add" type="submit" [disabled]="!userForm.form.valid"><i class="bi bi-plus-square-fill"></i></button></div>
+    </form>
+</div>
+<app-modal-qr></app-modal-qr>

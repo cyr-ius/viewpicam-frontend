@@ -1,0 +1,40 @@
+html,
+body {
+  font-family:
+    Source Sans Pro,
+    sans-serif;
+  font-weight: 400;
+  height: 100vh;
+}
+
+main > .container,
+main > .container-fluid,
+main > * > .container-fluid {
+  height: calc(100vh - 114px);
+}
+
+input:read-only {
+  background-color: var(--bs-secondary-bg);
+}
+
+/*
+.needs-validation .ng-touched.ng-valid[required], .need-validation .ng-touched.ng-valid.required  {
+  border-left: 5px solid #42A948;
+}
+.needs-validation .ng-touched:not(form).ng-invalid:not(form)  {
+  border-left: 5px solid #a94442;
+}
+*/
+
+.offcanvas-size-xl {
+  --bs-offcanvas-width: min(95vw, 700px) !important;
+}
+.offcanvas-size-xxl {
+  --bs-offcanvas-width: min(95vw, 90vw) !important;
+}
+.offcanvas-size-md {
+  --bs-offcanvas-width: min(95vw, 400px) !important;
+}
+.offcanvas-size-sm {
+  --bs-offcanvas-width: min(95vw, 250px) !important;
+}

@@ -1,0 +1,24 @@
+<div #gallery class="container-fluid overflow-auto px-5 py-2">
+  <div class="row">
+    <app-freedisk></app-freedisk>
+    <app-thumb-preview></app-thumb-preview>
+    <app-thumb-list-ordering></app-thumb-list-ordering>
+    <div id="thumbs" class="row g-3 m-1">
+      @for (thumb of thumbs(); track thumb.id) {
+        <app-thumb [thumb]="thumb" class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 col-xxl-1"></app-thumb>
+      }
+      @empty {
+        <div class="position-absolute top-50">
+          <div class="d-flex justify-content-center">
+            <div class="spinner-border text-dark" role="status" [hidden]="!spinner()">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+          </div>
+          <div class="text-center" [hidden]="spinner()">Thumb not found</div>
+          <div class="text-center" [hidden]="!spinner()">Loading...</div>
+        </div>
+      }
+    </div>
+  </div>
+</div>
+

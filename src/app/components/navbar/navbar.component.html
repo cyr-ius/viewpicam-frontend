@@ -1,0 +1,106 @@
+@let user = current_user();
+@if (user) {
+<nav class="navbar navbar-expand-md">
+  <div class="container-fluid">
+    <a class="navbar-brand" routerLink="/preview">
+        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="24" fill="currentColor" class="bi bi-eye" [ngClass]="{'d-none': global_spinner()}" viewBox="0 0 16 16">
+            <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z"/>
+            <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/>
+        </svg>
+        <div class="spinner-border" [ngClass]="{'d-none': !global_spinner()}" style="width: 22px; height: 22px;" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarToggler" aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    @if (user) {
+    <div class="collapse navbar-collapse text-center mt-2 mt-md-auto" id="navbarToggler">
+      @if (user!.right == 8 && menu_id() == 'preview' ){
+        <ul class="navbar-nav" id="main">
+          <li class="nav-item"><a class="nav-link" data-bs-toggle="offcanvas" href="#cameraSetting">Camera Settings</a></li>
+          @if (motion_mode() == "external") {
+          <li class="nav-item"><a class="nav-link" data-bs-toggle="offcanvas" href="#motionExternal">Motion Settings</a></li>
+          }
+          @else {
+          <li class="nav-item"><a class="nav-link" data-bs-toggle="offcanvas" href="#motionInternal">Motion Settings</a></li>
+          }
+        </ul>
+        <div #mainset class="row row-cols-1 row-cols-md-auto g-2 ms-auto">
+          <button class="btn btn-sm btn-outline-secondary me-md-1" type="button" (click)="mjpegMode()">@if(mjpeg_mode()){Default Mode} @else {Mjpeg Mode}</button>
+          <button class="btn btn-sm btn-outline-secondary me-md-1" type="button" (click)="displayMode()">@if(display_mode()){Display Off} @else{Display On}</button>
+        </div>
+      }
+      @if (user!.right == 8  && menu_id() == 'settings'){
+        <div  class="row row-cols-1 row-cols-md-auto g-2">
+            <button class="btn btn-sm btn-outline-secondary me-md-1" role="button" (click)="onBackup()">Backup</button>
+            <button class="btn btn-sm btn-outline-secondary me-md-1" data-bs-toggle="modal" data-bs-target="#uploadModal" role="button">Restore</button>
+        </div>
+      }
+      @if (user!.right == 8  && menu_id() == 'scheduler'){
+        <div class="row row-cols-1 row-cols-md-auto g-2">
+            <button class="btn btn-sm btn-outline-secondary me-md-1" type="button" (click)="saveSettings()">
+              <span class="spinner-border spinner-border-sm me-1 mt-1" aria-hidden="true" [hidden]="!spinner"></span>
+              <span role="status" i18n>Save settings</span>
+            </button>
+            <button class="btn btn-sm btn-outline-secondary me-md-1" type="button" (click)="toggleAction()">{{!scheduler_state()?'Start':'Stop'}}</button>
+        </div>
+      }
+
+      @if (user!.right == 8  && menu_id() == 'log'){
+        <div class="row row-cols-1 row-cols-md-auto g-2">
+            <button class="btn btn-sm btn-outline-secondary me-md-1" type="button" (click)="downloadLog()">Download Log</button>
+            <button class="btn btn-sm btn-outline-secondary me-md-1" type="button" (click)="clearLog()">Clear Log</button>
+        </div>
+      }
+
+      @if (user!.right > 4 && menu_id() == 'gallery' && display_preview()){
+        <div class="row row-cols-1 row-cols-md-auto g-2 me-1">
+            <button class="btn btn-sm btn-primary me-1" type="button" (click)="downloadThumb()">Download</button>
+            <button class="btn btn-sm btn-danger me-1" type="button" (click)="deleteThumb()">Delete</button>
+            <button class="btn btn-sm btn-primary me-1" type="button" [hidden]="current_thumb()?.type != 't'.toString()">Start convert</button>
+        </div>
+      }
+
+      @if (user!.right > 4 && menu_id() == 'gallery'){
+        <div class="row row-cols-1 row-cols-md-auto g-2">
+            <button class="btn btn-sm btn-outline-secondary me-1" type="button" (click)="unselectAll()">Deselect</button>
+            <button class="btn btn-sm btn-outline-secondary me-1" type="button" (click)="selectAll()">Select All</button>
+            <button class="btn btn-sm btn-primary me-1" type="button" (click)="downloadZip()">Download Zip</button>
+            <button class="btn btn-sm btn-warning me-1" type="button" (click)="deletedSelected()">Delete Selected</button>
+            <button class="btn btn-sm btn-danger me-1" type="button" (click)="deletedAll()">Delete All</button>
+            <button class="btn btn-sm btn-primary me-1" type="button" (click)="Lock()">Lock</button>
+            <button class="btn btn-sm btn-primary me-1" type="button" (click)="unLock()">Unlock</button>
+        </div>
+      }
+
+      <ul class="navbar-nav ms-md-auto">
+        @if (user!.right > 4){
+        <li class="nav-item"><a class="nav-link" routerLink="/gallery" routerLinkActive="active">Gallery</a></li>
+        }
+        @if (user!.right == 8 ) {
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">System</a>
+          <ul class="dropdown-menu" style="left:-20px">
+              <li class="nav-item"><a class="dropdown-item" routerLink="/settings" routerLinkActive="active">Settings</a></li>
+              <li class="nav-item"><a class="dropdown-item" routerLink="/scheduler" routerLinkActive="active">Scheduler</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li class="nav-item"><button class="dropdown-item" (click)="restartApp()">Restart application</button></li>
+              <li class="nav-item"><button class="dropdown-item" (click)="restartSys()">Restart system</button></li>
+              <li class="nav-item"><button class="dropdown-item" (click)="haltedSys()">Shutdown system</button></li>
+              <li class="nav-item"><button class="dropdown-item" (click)="resetSettings()">Reset settings</button></li>
+              <li><hr class="dropdown-divider"></li>
+              <li class="nav-item"><a class="dropdown-item" routerLink="/log" routerLinkActive="active">Show log</a></li>
+              <li class="nav-item"><a class="dropdown-item" routerLink="/api/v1/docs" target="_blank">API Docs</a></li>
+              <li class="nav-item"><a class="dropdown-item" routerLink="/help" routerLinkActive="active">Help</a></li>
+          </ul>
+        </li>
+        }
+        <li class="nav-item"><a class="nav-link" routerLink="" (click)="onLogout()">Logout ({{user!.name}})</a></li>
+      </ul>
+    </div>
+    }
+  </div>
+</nav>
+<app-modal-upload [hidden]="menu_id() != 'settings'"></app-modal-upload>
+}

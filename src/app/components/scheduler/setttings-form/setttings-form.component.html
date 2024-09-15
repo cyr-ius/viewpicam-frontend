@@ -1,0 +1,159 @@
+@let settings = scheduler_settings();
+@if (settings){
+<form #form_setting id="form_setting" class="row">
+    <div class="row row-cols-2 row-cols-md-4">
+        <div class="col mb-2"><label class="col-form-label-sm" i18n>Motion - Fifo In</label></div>
+        <div class="col">
+            <input class="form-control form-control-sm" type="text" autocomplete="off" disabled="disabled" [(ngModel)]="raspiconfig().motion_pipe" name="motion_pipe">
+        </div>
+        <div class="col mb-2 ps-md-5"><label class="col-form-label-sm" i18n>Control - Fifo Out</label></div>
+        <div class="col">
+            <input class="form-control form-control-sm" type="text" autocomplete="off" disabled="disabled" [(ngModel)]="raspiconfig().control_file" name="control_file">
+        </div>
+    </div>
+    <div class="row row-cols-2 row-cols-md-4">
+        <div class="col mb-2"><label class="col-form-label-sm" i18n>AutoCamera</label></div>
+        <div class="col">
+            <div class="input-group input-group-sm">
+                <input class="form-control form-control-sm" type="number" autocomplete="off" name="autocamera_interval" required [(ngModel)]="settings!.autocamera_interval">
+                <span class="input-group-text" i18n>seconds</span>
+            </div>
+        </div>
+        <div class="col mb-2 ps-md-5"><label class="col-form-label-sm" i18n>AutoCapture</label></div>
+        <div class="col">
+            <div class="input-group input-group-sm">
+                <input class="form-control form-control-sm" type="number" autocomplete="off" name="autocapture_interval" required [(ngModel)]="settings!.autocapture_interval">
+                <span class="input-group-text" i18n>seconds</span>
+            </div>
+        </div>
+    </div>
+    <div class="row row-cols-2 row-cols-md-4">
+        <div class="col mb-2"><label class="col-form-label-sm" i18n>Cmd Poll</label></div>
+        <div class="col">
+            <input class="form-control form-control-sm" type="number" autocomplete="off" name="cmd_poll" required [(ngModel)]="settings!.cmd_poll">
+        </div>
+        <div class="col mb-2 ps-md-5"><label class="col-form-label-sm" i18n>DawnStart</label></div>
+        <div class="col">
+            <div class="input-group input-group-sm">
+                <input class="form-control form-control-sm" type="number" autocomplete="off" name="dawnstart_minutes" required [(ngModel)]="settings!.dawnstart_minutes">
+                <span class="input-group-text" i18n>minutes</span>
+            </div>
+        </div>
+    </div>
+    <div class="row row-cols-2 row-cols-md-4">
+        <div class="col mb-2"><label class="col-form-label-sm" i18n>DayEnd</label></div>
+        <div class="col">
+            <div class="input-group input-group-sm">
+                <input class="form-control form-control-sm" type="number" autocomplete="off" name="dayend_minutes" required [(ngModel)]="settings!.dayend_minutes">
+                <span class="input-group-text" i18n>minutes</span>
+            </div>
+        </div>
+        <div class="col mb-2 ps-md-5"><label class="col-form-label-sm" i18n>Day Mode</label></div>
+        <div class="col">
+            <select id="daymode" class="form-select form-select-sm" name="daymode" required [(ngModel)]="settings!.daymode" (change)="onDayModeChange()">
+                <option [ngValue]="1" [selected]="settings!.daymode == 1">All Day</option>
+                <option [ngValue]="0" [selected]="settings!.daymode == 0">Sun based</option>
+                <option [ngValue]="2" [selected]="settings!.daymode == 2">Fixed Times</option>
+            </select>
+        </div>
+    </div>
+    <div class="row row-cols-2 row-cols-md-4">
+        <div class="col mb-2"><label class="col-form-label-sm"i18n>DayStart</label></div>
+        <div class="col">
+            <div class="input-group input-group-sm">
+                <input class="form-control form-control-sm" type="number" autocomplete="off" name="daystart_minutes" required [(ngModel)]="settings!.daystart_minutes">
+                <span class="input-group-text"i18n>minutes</span>
+            </div>
+        </div>
+        <div class="col mb-2 ps-md-5"><label class="col-form-label-sm"i18n>DuskEnd</label></div>
+        <div class="col">
+            <div class="input-group input-group-sm">
+                <input class="form-control form-control-sm" type="number" autocomplete="off" name="duskend_minutes" required [(ngModel)]="settings!.duskend_minutes">
+                <span class="input-group-text"i18n>minutes</span>
+            </div>
+        </div>
+    </div>
+    <div class="row row-cols-2 row-cols-md-4">
+        <div class="col mb-2"><label class="col-form-label-sm"i18n>Purge Video</label></div>
+        <div class="col">
+            <div class="input-group input-group-sm">
+                <input class="form-control form-control-sm" type="number" autocomplete="off" name="purgevideo_hours" required [(ngModel)]="settings!.purgevideo_hours">
+                <span class="input-group-text">hours</span>
+            </div>
+        </div>
+        <div class="col mb-2 ps-md-5"><label class="col-form-label-sm"i18n>GMT offset</label></div>
+        <div class="col">
+            <select class="form-select form-select-sm" id="gmt_offset" name="gmt_offset" [(ngModel)]="settings!.gmt_offset">
+                @for (timezone of timezones | async ; track $index) {
+                <option value="{{timezone}}" [selected]="settings!.gmt_offset == timezone">{{timezone}}</option>
+                }
+            </select>
+        </div>
+    </div>
+    <div class="row row-cols-2 row-cols-md-4">
+        <div class="col mb-2"><label class="col-form-label-sm"i18n>Latitude</label></div>
+        <div class="col">
+            <input class="form-control form-control-sm" type="number" autocomplete="off" name="latitude" step="0.01" [(ngModel)]="settings!.latitude">
+        </div>
+        <div class="col mb-2 ps-md-5"><label class="col-form-label-sm"i18n>Longitude</label></div>
+        <div class="col">
+            <input class="form-control form-control-sm" type="number" autocomplete="off" name="longitude" step="0.01" [(ngModel)]="settings!.longitude">
+        </div>
+    </div>
+    <div class="row row-cols-2 row-cols-md-4">
+        <div class="col mb-2"><label class="col-form-label-sm"i18n>Management command</label></div>
+        <div class="col">
+            <input class="form-control form-control-sm" type="text" autocomplete="off" name="managment_command" [(ngModel)]="settings!.managment_command">
+        </div>
+        <div class="col mb-2 ps-md-5"><label class="col-form-label-sm"i18n>Management interval</label></div>
+        <div class="col">
+            <div class="input-group input-group-sm">
+                <input class="form-control form-control-sm" type="number" autocomplete="off" name="managment_interval" [(ngModel)]="settings!.managment_interval">
+                <span class="input-group-text"i18n>seconds</span>
+            </div>
+        </div>
+    </div>
+    <div class="row row-cols-2 row-cols-md-4">
+        <div class="col mb-2"><label class="col-form-label-sm"i18n>Max capture</label></div>
+        <div class="col">
+            <input class="form-control form-control-sm" type="number" autocomplete="off" name="max_capture" required [(ngModel)]="settings!.max_capture">
+        </div>
+        <div class="col mb-2 ps-md-5"><label class="col-form-label-sm"i18n>Mode Poll</label></div>
+        <div class="col">
+            <input class="form-control form-control-sm" type="number" autocomplete="off" name="mode_poll" required [(ngModel)]="settings!.mode_poll">
+        </div>
+    </div>
+    <div class="row row-cols-2 row-cols-md-4">
+        <div class="col mb-2"><label class="col-form-label-sm"i18n>Purge image</label></div>
+        <div class="col">
+            <div class="input-group input-group-sm">
+                <input class="form-control form-control-sm" type="number" autocomplete="off" name="purgeimage_hours" required [(ngModel)]="settings!.purgeimage_hours">
+                <span class="input-group-text"i18n>hours</span>
+            </div>
+        </div>
+        <div class="col mb-2 ps-md-5"><label class="col-form-label-sm"i18n>Purge lapse</label></div>
+        <div class="col">
+            <div class="input-group input-group-sm">
+                <input class="form-control form-control-sm" type="number" autocomplete="off" name="purgelapse_hours" required [(ngModel)]="settings!.purgelapse_hours">
+                <span class="input-group-text"i18n>hours</span>
+            </div>
+        </div>
+    </div>
+    <div class="row row-cols-2 row-cols-md-4">
+        <div class="col mb-2"><label class="col-form-label-sm"i18n>Purge space level</label></div>
+        <div class="col">
+            <input class="form-control form-control-sm" type="number" autocomplete="off" name="purgespace_level" required [(ngModel)]="settings!.purgespace_level">
+        </div>
+        <div class="col mb-2 ps-md-5"><label class="col-form-label-sm"i18n>Purge Mode</label></div>
+        <div class="col">
+            <select id="PurgeSpace_ModeEx" class="form-select form-select-sm" name="purgespace_modeex" required [(ngModel)]="settings!.purgespace_modeex">
+                <option [ngValue]="0" [selected]="settings!.purgespace_modeex == 0">Off</option>
+                <option [ngValue]="1" [selected]="settings!.purgespace_modeex == 1">Min Space %</option>
+                <option [ngValue]="2" [selected]="settings!.purgespace_modeex == 2">Max Usage %</option>
+                <option [ngValue]="3" [selected]="settings!.purgespace_modeex == 3">Min Space GB</option>
+                <option [ngValue]="4" [selected]="settings!.purgespace_modeex == 4">Max Usage GB</option>
+            </select>
+        </div>
+    </div>
+</form>
+}

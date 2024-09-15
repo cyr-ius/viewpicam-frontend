@@ -1,0 +1,11 @@
+<div class="row" i18n>Debug</div>
+<div id="loglevel" class="row g-1 ms-2">
+    <div class="col"><label class="form-check-label" for="loglevel" i18n>Verbose level</label></div>
+    <div class="col-auto ">
+        <select class="form-select form-select-sm" name="loglevel" [(ngModel)]="settings().loglevel" (change)="onChange()">
+            @for(item of ["INFO","WARNING","ERROR","DEBUG"]; track $index) {
+            <option value="{{item}}">{{item}}</option>
+            }
+        </select>
+    </div>
+</div>

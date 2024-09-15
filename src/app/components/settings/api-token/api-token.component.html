@@ -1,0 +1,18 @@
+@if(apitoken){
+<div class="row">
+    API Token<p class="text-body-secondary" i18n>The generation of the token allows it to be passed as a parameter of the pages to avoid authentication.</p>
+</div>
+<div id="api_token" class="row">
+    <div class="row g-1 ms-2">
+        <div class="col">
+            <div class="input-group">
+                <input class="form-control form-control-sm token" type="text" namep="api_token" [(ngModel)]="apitoken.api_token" disabled>
+                <button class="btn btn-sm btn-outline-secondary clipboard" i18n-title="Add to clipboard" (click)="copyToClipboard(apitoken.api_token)"><i class="bi bi-clipboard"></i></button>
+                <button class="btn btn-sm btn-outline-secondary get" i18n-title="Generate" i18 (click)="setToken()">Generate</button>
+                <button class="btn btn-sm btn-outline-secondary delete" i18n-title="Reset" i18n (click)="deleteToken()">Reset</button>
+            </div>
+            <a href="/api/doc" target="_blank">API Swagger</a>
+        </div>
+    </div>
+</div>
+}

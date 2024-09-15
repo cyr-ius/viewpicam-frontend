@@ -1,0 +1,38 @@
+<div class="row" i18n>Options</div>
+<div class="row">
+    <div class="row g-1 ms-2">
+        <div class="col"><label class="form-check-label" for="servo">Servo blaster</label></div>
+        <div class="col-auto">
+            <div class="form-check form-switch">
+                <input class="form-check-input" id="servo" name="servo" type="checkbox" [(ngModel)]="settings().servo" (change)="onChange()">
+            </div>
+        </div>
+    </div>
+    <div class="row g-1 ms-2">
+        <div class="col"><label class="form-check-label" for="pipan">Pi Pan</label></div>
+        <div class="col-auto">
+            <div class="form-check form-switch">
+                <input class="form-check-input" id="pipan" name="pipan" type="checkbox" [(ngModel)]="settings().pipan" (change)="onChange()">
+            </div>
+        </div>
+    </div>
+    <div class="row g-1 ms-2">
+        <div class="col"><label class="form-check-label" for="pilight">Pi Light</label></div>
+        <div class="col-auto">
+            <div class="form-check form-switch">
+                <input class="form-check-input" id="pilight" name="pilight" type="checkbox" [(ngModel)]="settings().pilight" (change)="onChange()">
+            </div>
+        </div>
+    </div>
+    <div class="row g-1 ms-2">
+        <div class="col"><label class="form-label" for="upreset">UPreset</label></div>
+        <div class="col-auto ">
+            <select class="form-select form-select-sm" id="upreset" name="upreset" [(ngModel)]="settings().upreset" (change)="onChange()">
+                @for (preset of presets; track $index){
+                <option value="{{preset}}">{{preset}}</option>
+                }
+            </select>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,12 @@
+<div class="container-fluid overflow-auto">
+	<div class="row g-3 justify-content-md-center">
+	@for (multiview of multiviews | async ; track multiview.id) {
+		<div class="col-auto" [hidden]="!multiview.state">
+			<a routerLink="/preview?rHost={{multiview.id}}">
+        <img id="mjpeg_dest_{{multiview.id}}" src="{{multiview.url}}"/>
+      </a>
+		</div>
+	}
+	</div>
+</div>
+

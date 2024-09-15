@@ -1,0 +1,32 @@
+@let size= (thumb().size > 1024 ? (thumb().size / 1024): thumb().size) | number: '1.0-0';
+<div class="card shadow-sm">
+    <a title="{{thumb().realname}}" routerLink="/gallery/{{thumb().id}}">
+        <img class="mx-auto d-block card-img-top" loading="lazy" [src]="thumb_src()"/>
+    </a>
+    <div class="card-img-overlay" style="height:5px;">
+        <i class="float-start bi-camera-reels" style="font-size: 16px;color: white;" [hidden]="thumb().type != 'v'.toString()"></i>
+        <i class="float-start bi-images" style="font-size: 16px;color: white;" [hidden]="thumb().type != 't'.toString()"></i>
+        <i class="float-start bi-camera" style="font-size: 16px;color: white;" [hidden]="thumb().type != 'i'.toString()"></i>
+    </div>
+    <div class="card-body">
+        <div class="row">
+          <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" role="switch" id="btn-check-{{thumb().id}}" name="thumb_id" value="{{thumb().id}}" [(ngModel)]="thumb().selected" (change)="selectedThumb()">
+              <label class="form-check-label" for="{{thumb().id}}">{{thumb().datetime | date: 'short'}}</label>
+          </div>
+        </div>
+        <div class="row justify-content-between align-items-center mt-2">
+            <div class="col-auto">
+                <button style="--bs-btn-font-size: .60rem;" class="btn btn-outline-danger me-1" type="button" value="{{thumb().id}}" [disabled]="thumb().locked" (click)="delete(thumb().id)"><i class="bi bi-trash"></i></button>
+                <button style="--bs-btn-font-size: .60rem;" class="btn btn-outline-warning {{thumb().locked?'active':''}} me-1" type="button" (click)="lock(thumb().id)"><i class="bi {{+thumb().locked?'bi-lock':'bi-unlock'}}"></i></button>
+            </div>
+            <small class="col-auto text-body-secondary">
+              @if (thumb().size > 1024){ {{size}}MB } @else { {{size}}KB }
+              @if(thumb().lcount > 0){ {{thumb().lcount}} }
+              @if(+thumb().duration > 0){ {{thumb().duration}}s }
+              </small>
+        </div>
+    </div>
+</div>
+
+

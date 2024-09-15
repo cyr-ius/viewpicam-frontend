@@ -1,0 +1,12 @@
+@let user = current_user();
+<div id="main-buttons" class="row row-cols-sm-auto justify-content-center g-2 my-2 mx-auto">
+    @if (user!.right >= 4) {
+    <button id="video_button" type="button" class="btn btn-sm btn-outline-secondary g-2 mx-2" [disabled]="video_btn.disable" (click)="sendCmd(video_btn.cmd, video_btn.params)">{{video_btn.label}}</button>
+    <button id="image_button" type="button" class="btn btn-sm btn-outline-secondary g-2 mx-2" [disabled]="image_btn.disable" (click)="sendCmd(image_btn.cmd, image_btn.params)">{{image_btn.label}}</button>
+    <button id="timelapse_button" type="button" class="btn btn-sm btn-outline-secondary g-2 mx-2" [disabled]="timelapse_btn.disable" (click)="sendCmd(timelapse_btn.cmd, timelapse_btn.params)">{{timelapse_btn.label}}</button>
+    }
+    @if (user!.right >= 8) {
+    <button id="md_button" type="button" class="btn btn-sm btn-outline-secondary g-2 mx-2" [disabled]="md_btn.disable" (click)="sendCmd(md_btn.cmd, md_btn.params)">{{md_btn.label}}</button>
+    <button id="halt_button" type="button" class="btn btn-sm {{halt_btn.css}} btn-danger g-2 mx-2" [disabled]="halt_btn.disable" (click)="sendCmd(halt_btn.cmd, halt_btn.params)">{{halt_btn.label}}</button>
+    }
+</div>

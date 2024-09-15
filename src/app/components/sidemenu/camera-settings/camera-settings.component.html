@@ -1,0 +1,550 @@
+<div class="offcanvas offcanvas-start offcanvas-size-xl" tabindex="-1" id="cameraSetting" aria-labelledby="cameraSettingLabel">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="cameraSettingLabel">Camera Settings</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <hr/>
+    <div class="offcanvas-body">
+        <div class="row g-3">
+            <label class="col col-form-label">Load Preset</label>
+            <div class="col">
+                <select class="form-select form-select-sm" (change)="setPreset(preset)" name="preset" [(ngModel)]="preset">
+                    <option value="">Select option...</option>
+                    @for (preset of presets; track preset) {
+                    <option value="{{preset.name}}">{{preset.name}}</option>
+                    }
+                </select>
+            </div>
+        </div>
+        <span>Customs values</span>
+        <div class="row g-3">
+            <label class="col col-form-label">Video res</label>
+            <div class="col">
+                <div class="row">
+                    <div class="col">
+                        <div class="input-group input-group-sm">
+                            <input [(ngModel)]="raspiconfig().video_width" class="form-control form-control-sm" name="video_width" type="number" step="1">
+                            <span class="input-group-text">px</span>
+                        </div>
+                    </div> x
+                    <div class="col">
+                        <div class="input-group input-group-sm">
+                            <input [(ngModel)]="raspiconfig().video_height" class="form-control form-control-sm" name="video_height" type="number" step="1">
+                            <span class="input-group-text">px</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row g-3">
+            <label class="col col-form-label">Video fps</label>
+            <div class="col">
+                <div class="row">
+                    <div class="col">
+                        <div class="input-group input-group-sm">
+                            <input [(ngModel)]="raspiconfig().video_fps" class="form-control form-control-sm" name="video_fps" type="number" step="1">
+                            <span class="input-group-text">recording</span>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="input-group input-group-sm">
+                            <input [(ngModel)]="raspiconfig().mp4box_fps" class="form-control form-control-sm" name="mp4box_fps" type="number" step="1">
+                            <span class="input-group-text">boxing</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row g-3">
+            <label class="col col-form-label">FPS divider</label>
+            <div class="col">
+                <input [(ngModel)]="raspiconfig().fps_divider" class="form-control form-control-sm" name="fps_divider" type="number" step="1">
+            </div>
+        </div>
+        <div class="row g-3">
+            <label class="col col-form-label">Image res</label>
+            <div class="col">
+                <div class="row">
+                    <div class="col">
+                        <div class="input-group input-group-sm">
+                            <input [(ngModel)]="raspiconfig().image_width"  class="form-control form-control-sm" name="image_width" type="number" step="1">
+                            <span class="input-group-text">px</span>
+                        </div>
+                    </div> x
+                    <div class="col">
+                        <div class="input-group input-group-sm">
+                            <input [(ngModel)]="raspiconfig().image_height" class="form-control form-control-sm" name="image_height" type="number" step="1">
+                            <span class="input-group-text">px</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row g-3">
+            <label class="col col-form-label">Resolutions</label>
+            <div class="col">
+                <button class="btn btn-sm btn-primary" (click)="sendCmd('px', [raspiconfig().video_width, raspiconfig().video_height, raspiconfig().video_fps, raspiconfig().mp4box_fps, raspiconfig().image_width, raspiconfig().image_height, raspiconfig().fps_divider])"
+                 >OK</button>
+            </div>
+        </div>
+        <hr>
+        @if (+raspiconfig().camera_num > 0) {
+        <div class="row g-3">
+            <span>Camera select (Compute module only)</span>
+            <label class="col col-form-label">Use camera</label>
+            <div class="col">
+            <select class="form-select form-select-sm" (change)="sendCmd('cn',raspiconfig().camera_num)" [(ngModel)]="raspiconfig().camera_num" name="camera_num">
+                <option value="1">First</option>
+                <option value="2">Second</option>
+            </select>
+            </div>
+        </div>
+        }
+        <div class="row g-3">
+            <label class="col col-form-label">Timelapse-Interval (0.1...3200):</label>
+            <div class="col">
+                <div class="input-group input-group-sm">
+                    <input class="form-control form-control-sm" name="tl_interval" type="number" min="1" max="3200" step="1" [(ngModel)]="raspiconfig().tl_interval" value="{{raspiconfig().tl_interval /10}}" (change)="sendCmd('tv',(10 * +raspiconfig().tl_interval))">
+                    <span class="input-group-text me-1">sec.</span>
+                </div>
+            </div>
+        </div>
+        <div class="row g-3">
+            <label class="col col-form-label">Video Split (seconds, default 0=off):</label>
+            <div class="col">
+                <div class="input-group input-group-sm">
+                    <input class="form-control form-control-sm" name="video_split" type="number" min="0" step="1" [(ngModel)]="raspiconfig().video_split" (change)="sendCmd('vi',raspiconfig().video_split)">
+                    <span class="input-group-text">sec.</span>
+                </div>
+            </div>
+        </div>
+        <div class="row g-3">
+            <label class="col col-form-label">Annotation (max 127 characters)</label>
+            <div class="col">
+                <div class="input-group">
+                    <input class="form-control form-control-sm " name="annotation" type="text" maxlength="127" [(ngModel)]="raspiconfig().annotation" (change)="sendCmd('an',raspiconfig().annotation)">
+                    <button class="btn btn-sm btn-outline-secondary" value="Default" (click)="raspiconfig().annotation='RPi Cam %Y.%M.%D_%h:%m:%s'; sendCmd('an',raspiconfig().annotation)">Default</button>
+                </div>
+            </div>
+        </div>
+        <div class="row g-3">
+            <label class="col col-form-label">Background</label>
+            <div class="col">
+                <select class="form-select form-select-sm" (change)="sendCmd('ab',raspiconfig().anno_background)" [(ngModel)]="raspiconfig().anno_background" name="anno_background">
+                    <option value="1">On</option>
+                    <option value="0">Off</option>
+                </select>
+            </div>
+        </div>
+        <div class="row g-3">
+            <label class="col col-form-label">Annotation size(0-99):</label>
+            <div class="col">
+                <input class="form-control form-control-sm" name="anno_text_size" type="number" step="1" min="0" max="99" [(ngModel)]="raspiconfig().anno_text_size" (change)="sendCmd('as',raspiconfig().anno_text_size)">
+            </div>
+        </div>
+        <div class="row g-3">
+            <label class="col col-form-label">Custom text color:</label>
+            <div class="col">
+                <input [(ngModel)]="at_yuv" name="at_yuv" class="form-control form-control-sm" type="color" (change)="setAt(at_yuv)">
+                <input [(ngModel)]="raspiconfig().anno3_custom_text_Y" id="at_y" type="hidden" name="at_y">
+                <input [(ngModel)]="raspiconfig().anno3_custom_text_Y" id="at_u" type="hidden" name="at_u">
+                <input [(ngModel)]="raspiconfig().anno3_custom_text_Y" id="at_v" type="hidden" name="at_v">
+            </div>
+        </div>
+        <div class="row g-3">
+            <label class="col col-form-label">Custom background color:</label>
+            <div class="col">
+                <input [(ngModel)]="ac_yuv" name="ac_yuv" class="form-control form-control-sm" type="color" (change)="setAc(ac_yuv)">
+                <input [(ngModel)]="raspiconfig().anno3_custom_background_Y" id="ac_y" type="hidden" name="ac_y">
+                <input [(ngModel)]="raspiconfig().anno3_custom_background_U" id="ac_u" type="hidden" name="ac_u">
+                <input [(ngModel)]="raspiconfig().anno3_custom_background_V" id="ac_v" type="hidden" name="ac_v">
+            </div>
+        </div>
+        @if (pilight_mode()) {
+        <div class="row g-3">
+            <label class="col col-form-label">Pi-Light:</label>
+            <div class="col">
+                R: <input [(ngModel)]="raspiconfig().pilight_r" type="number" size="4" name="pilight_r" value="255" min="0" max="255" step="1" (change)="switchLed(+raspiconfig().pilight_r,+raspiconfig().pilight_g,+raspiconfig().pilight_b)">
+                G: <input [(ngModel)]="raspiconfig().pilight_g" type="number" size="4" name="pilight_g" value="255" min="0" max="255" step="1" (change)="switchLed(+raspiconfig().pilight_r,+raspiconfig().pilight_g,+raspiconfig().pilight_b)">
+                B: <input [(ngModel)]="raspiconfig().pilight_b" type="number" size="4" name="pilight_b" value="255" min="0" max="255" step="1" (change)="switchLed(+raspiconfig().pilight_r,+raspiconfig().pilight_g,+raspiconfig().pilight_b)">
+            </div>
+        </div>
+        }
+        <div class="row g-3">
+            <label class="col col-form-label">Buffer (1000..ms), default 0</label>
+            <div class="col">
+                <div class="input-group input-group-sm">
+                    <input class="form-control form-control-sm" name="video_buffer" type="number" min="0" step="1" [(ngModel)]="raspiconfig().video_buffer" (change)="sendCmd('bu',raspiconfig().video_buffer)">
+                    <span class="input-group-text me-1">ms</span>
+                </div>
+            </div>
+        </div>
+        <div class="row g-3">
+            <label class="col col-form-label">Sharpness (-100...100), default 0:</label>
+            <div class="col">
+                <input class="form-control form-control-sm" name="sharpness" type="number" min="-100" max="100" step="1" [(ngModel)]="raspiconfig().sharpness" (change)="sendCmd('sh',raspiconfig().sharpness)">
+            </div>
+        </div>
+        <div class="row g-3">
+            <label class="col col-form-label">Contrast (-100...100), default 0:</label>
+            <div class="col">
+                <input class="form-control form-control-sm" name="contrast" type="number" min="-100" max="100" step="1" [(ngModel)]="raspiconfig().contrast" (change)="sendCmd('co',raspiconfig().contrast)">
+            </div>
+        </div>
+        <div class="row g-3">
+            <label class="col col-form-label">Brightness (0...100), default 50:</label>
+            <div class="col">
+                <input class="form-control form-control-sm" name="brightness" type="number" min="0" max="100" step="1" [(ngModel)]="raspiconfig().brightness" (change)="sendCmd('br',raspiconfig().brightness)">
+            </div>
+        </div>
+        <div class="row g-3">
+            <label class="col-form-label col-6">Saturation (-100...100), default 0:</label>
+            <div class="col">
+                <input class="form-control form-control-sm" name="saturation" type="number" min="-100" max="100" step="1" [(ngModel)]="raspiconfig().saturation" (change)="sendCmd('sa',raspiconfig().saturation)">
+            </div>
+        </div>
+        <div class="row g-3">
+            <label class="col col-form-label">ISO (100...800), default 0:</label>
+            <div class="col">
+                <input class="form-control form-control-sm" name="iso" type="number" min="100" max="800" step="100" [(ngModel)]="raspiconfig().iso" (change)="sendCmd('is',raspiconfig().iso)">
+            </div>
+        </div>
+        <div class="row g-3">
+            <label class="col col-form-label">Metering Mode, default 'average':</label>
+            <div class="col">
+                <select class="form-select form-select-sm" (change)="sendCmd('mm',raspiconfig().metering_mode)" [(ngModel)]="raspiconfig().metering_mode" name="metering_mode">
+                    <option value="average">Average</option>
+                    <option value="spot">Spot</option>
+                    <option value="backlit">Backlit</option>
+                    <option value="matrix">Matrix</option>
+                </select>
+            </div>
+        </div>
+        <div class="row g-3">
+            <label class="col col-form-label">Video Stabilisation, default: 'off'</label>
+            <div class="col">
+                <select class="form-select form-select-sm" (change)="sendCmd('vs',raspiconfig().video_stabilisation)" [(ngModel)]="raspiconfig().video_stabilisation" name="video_stabilisation">
+                    <option value="0">Off</option>
+                    <option value="1">On</option>
+                </select>
+            </div>
+        </div>
+        <div class="row g-3">
+            <label class="col col-form-label">Exposure Compensation (-10..10), default 0:</label>
+            <div class="col">
+                <input class="form-control form-control-sm" name="exposure_compensation" type="number" min="-10" max="10" step="1" [(ngModel)]="raspiconfig().exposure_compensation" (change)="sendCmd('ec',raspiconfig().exposure_compensation)">
+            </div>
+        </div>
+        <div class="row g-3">
+            <label class="col col-form-label">Exposure Mode, default 'auto':</label>
+            <div class="col">
+                <select class="form-select form-select-sm" (change)="sendCmd('em', raspiconfig().exposure_mode)" [(ngModel)]="raspiconfig().exposure_mode" name="exposure_mode">
+                    <option value="off">Off</option>
+                    <option value="auto">Auto</option>
+                    <option value="night">Night</option>
+                    <option value="nightpreview">Nightpreview</option>
+                    <option value="backlight">Backlight</option>
+                    <option value="spotlight">Spotlight</option>
+                    <option value="sports">Sports</option>
+                    <option value="snow">Snow</option>
+                    <option value="beach">Beach</option>
+                    <option value="verylong">Verylong</option>
+                    <option value="fixedfps">Fixedfps</option>
+                </select>
+            </div>
+        </div>
+        <div class="row g-3">
+            <label class="col col-form-label">White Balance, default 'auto':</label>
+            <div class="col">
+                <select class="form-select form-select-sm" (change)="sendCmd('wb',raspiconfig().white_balance)" [(ngModel)]="raspiconfig().white_balance" name="white_balance">
+                    <option value="off">Off</option>
+                    <option value="auto">Auto</option>
+                    <option value="sun">Sun</option>
+                    <option value="cloudy">Cloudy</option>
+                    <option value="shade">Shade</option>
+                    <option value="tungsten">Tungsten</option>
+                    <option value="fluorescent">Fluorescent</option>
+                    <option value="incandescent">Incandescent</option>
+                    <option value="flash">Flash</option>
+                    <option value="horizon">Horizon</option>
+                    <option value="greyworld">Greyworld</option>
+                </select>
+            </div>
+        </div>
+        <div class="row g-3">
+            <label class="col-6 col-form-label">White Balance Gains (x100):</label>
+            <div class="col">
+                <div class="input-group input-group-sm">
+                    <span class="input-group-text">gain_r</span>
+                    <input class="form-control form-control-sm" name="ag_r" type="number" min="0" step="1" [(ngModel)]="raspiconfig().autowbgain_r" (change)="sendCmd('ag',[raspiconfig().ag_r,raspiconfig().ag_b])">
+                </div>
+            </div>
+            <div class="col">
+                <div class="input-group input-group-sm">
+                    <span class="input-group-text">gain_by</span>
+                    <input class="form-control form-control-sm" name="ag_b" type="number" min="0" step="1" [(ngModel)]="raspiconfig().autowbgain_b" (change)="sendCmd('ag',[raspiconfig().ag_r,raspiconfig().ag_b])">
+                </div>
+            </div>
+        </div>
+        <div class="row g-3">
+            <label class="col col-form-label">Image Effect, default 'none':</label>
+            <div class="col">
+                <select class="form-select form-select-sm" (change)="sendCmd('ie',raspiconfig().image_effect.value)" [(ngModel)]="raspiconfig().image_effect" name="image_effect">
+                  <option value="none">None</option>
+                  <option value="negative">Negative</option>
+                  <option value="solarise">Solarise</option>
+                  <option value="sketch">Sketch</option>
+                  <option value="denoise">Denoise</option>
+                  <option value="emboss">Emboss</option>
+                  <option value="oilpaint">Oilpaint</option>
+                  <option value="hatch">Hatch</option>
+                  <option value="gpen">Gpen</option>
+                  <option value="pastel">Pastel</option>
+                  <option value="watercolour">Watercolour</option>
+                  <option value="film">Film</option>
+                  <option value="blur">Blur</option>
+                  <option value="saturation">Saturation</option>
+                  <option value="colourswap">Colourswap</option>
+                  <option value="washedout">Washedout</option>
+                  <option value="posterise">Posterise</option>
+                  <option value="cartoon">Cartoon</option>
+                </select>
+            </div>
+        </div>
+        <div class="row g-3">
+            <label class="col col-form-label">Colour Effect, default 'disabled':</label>
+            <div class="col">
+                <select class="form-select form-select-sm" id="ce_en"
+                (change)="sendCmd('ce',[raspiconfig().colour_effect_en, raspiconfig().colour_effect_u, raspiconfig().colour_effect_v])" [(ngModel)]="raspiconfig().colour_effect_en" name="colour_effect_en">
+                    <option value="0">Disabled</option>
+                    <option value="1">Enabled</option>
+                </select>
+            </div>
+        </div>
+        <div class="row g-3">
+            <div class="offset-6 col-6 mb-2">
+                <div class="row g-3">
+                    <div class="col">
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-text">u</span>
+                            <input class="form-control form-control-sm " name="ce_u" type="number" min="0" step="1" [(ngModel)]="raspiconfig().colour_effect_u"
+                             (change)="sendCmd('ce',[raspiconfig().colour_effect_en, raspiconfig().colour_effect_u, raspiconfig().colour_effect_v])">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-text">v</span>
+                            <input class="form-control form-control-sm " name="ce_v" type="number" min="0" step="1" [(ngModel)]="raspiconfig().colour_effect_v"
+                             (change)="sendCmd('ce',[raspiconfig().colour_effect_en, raspiconfig().colour_effect_u, raspiconfig().colour_effect_v])">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row g-3">
+            <label class="col col-form-label">Image Statistics, default 'Off':</label>
+            <div class="col">
+                <select class="form-select form-select-sm" (change)="sendCmd('st',raspiconfig().stat_pass)" [(ngModel)]="raspiconfig().stat_pass" name="stat_pass">
+                    <option value="0">Off</option>
+                    <option value="1">On</option>
+                </select>
+            </div>
+        </div>
+        <div class="row g-3">
+            <label class="col col-form-label">Rotation, default 0:</label>
+            <div class="col">
+                <div class="input-group input-group-sm">
+                    <select class="form-select form-select-sm" (change)="sendCmd('ro',raspiconfig().rotation)" [(ngModel)]="raspiconfig().rotation" name="rotation">
+                        <option value="0">0</option>
+                        <option value="90">90</option>
+                        <option value="180">180</option>
+                        <option value="270">270</option>
+                    </select>
+                    <span class="input-group-text me-1">°</span>
+                </div>
+            </div>
+        </div>
+        <div class="row g-3">
+            <label class="col col-form-label">Flip, default 'none':</label>
+            <div class="col">
+                <select class="form-select form-select-sm" (change)="sendCmd('fl',raspiconfig().flip)" [(ngModel)]="raspiconfig().flip" name="flip">
+                    <option value="0">None</option>
+                    <option value="1">Horizontal</option>
+                    <option value="2">Vertical</option>
+                    <option value="3">Both</option>
+                </select>
+            </div>
+        </div>
+        <div class="row g-3">
+            <label class="col-6 col-form-label">Sensor Region, default 0/0/65536/65536:</label>
+            <div class="col">
+                <div class="input-group input-group-sm">
+                    <span class="input-group-text">x</span>
+                    <input #sensor_region_x class="form-control form-control-sm " name="roi_x" type="number" min="0" step="1" [(ngModel)]="raspiconfig().sensor_region_x"
+                     (change)="sendCmd('ri',[raspiconfig().sensor_region_x,raspiconfig().sensor_region_y,raspiconfig().sensor_region_w,raspiconfig().sensor_region_h])">
+                </div>
+            </div>
+            <div class="col">
+                <div class="input-group input-group-sm">
+                    <span class="input-group-text">y</span>
+                    <input class="form-control form-control-sm " name="roi_y" type="number" min="0" step="1" [(ngModel)]="raspiconfig().sensor_region_y"
+                     (change)="sendCmd('ri',[raspiconfig().sensor_region_x,raspiconfig().sensor_region_y,raspiconfig().sensor_region_w,raspiconfig().sensor_region_h])">
+                </div>
+            </div>
+        </div>
+        <div class="row g-3">
+            <div class="offset-6 col-6 mb-2">
+                <div class="row g-3">
+                    <div class="col">
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-text">w</span>
+                            <input class="form-control form-control-sm " name="roi_w" type="number" min="0" step="1" [(ngModel)]="raspiconfig().sensor_region_w"
+                             (change)="sendCmd('ri',[raspiconfig().sensor_region_x,raspiconfig().sensor_region_y,raspiconfig().sensor_region_w,raspiconfig().sensor_region_h])">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="input-group input-group-sm">
+                            <span class="input-group-text">h</span>
+                            <input class="form-control form-control-sm " name="roi_h" type="number" min="0" step="1" [(ngModel)]="raspiconfig().sensor_region_h"
+                             (change)="sendCmd('ri',[raspiconfig().sensor_region_x,raspiconfig().sensor_region_y,raspiconfig().sensor_region_w,raspiconfig().sensor_region_h])">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row g-3">
+            <label class="col col-form-label">Shutter speed (0...CameraMax uS), default 0:</label>
+            <div class="col">
+                <div class="input-group input-group-sm">
+                    <input class="form-control form-control-sm " name="shutter_speed" type="number" min="0" step="1" [(ngModel)]="raspiconfig().shutter_speed" (change)="sendCmd('ss',raspiconfig().shutter_speed)">
+                     <span class="input-group-text me-1">µsec.</span>
+                </div>
+            </div>
+        </div>
+        <div class="row g-3">
+            <label class="col col-form-label">Image quality (0...100), default 10:</label>
+            <div class="col">
+                <input class="form-control form-control-sm " name="image_quality" type="number" min="0" max="100" step="1" [(ngModel)]="raspiconfig().image_quality" (change)="sendCmd('qu',raspiconfig().image_quality)">
+            </div>
+        </div>
+        <div class="row g-3">
+                <label class="col col-form-label">Preview (1..100), default 10</label>
+                <label class="col col-form-label">Width (128..1024), default 512</label>
+                <label class="col col-form-label">Divider (1-16), default 1</label>
+        </div>
+        <div class="row g-3 text-end mb-2">
+            <div class="col">
+                <div class="input-group input-group-sm">
+                    <span class="input-group-text">Quality</span>
+                    <input class="form-control form-control-sm " name="quality" type="number" min="1" max="100" step="1" [(ngModel)]="raspiconfig().quality"
+                     (change)="sendCmd('pv',[raspiconfig().preview_quality, raspiconfig().preview_width, raspiconfig().preview_divider])">
+                </div>
+            </div>
+            <div class="col">
+                <div class="input-group input-group-sm">
+                    <span class="input-group-text">Width</span>
+                    <input class="form-control form-control-sm " name="width" type="number" min="128" max="1024" step="1" [(ngModel)]="raspiconfig().width"
+                     (change)="sendCmd('pv',[raspiconfig().preview_quality, raspiconfig().preview_width, raspiconfig().preview_divider])">
+                </div>
+            </div>
+            <div class="col">
+                <div class="input-group input-group-sm">
+                    <span class="input-group-text">Divider</span>
+                    <input class="form-control form-control-sm " name="divider" type="number" min="1" max="16" step="1" [(ngModel)]="raspiconfig().divider"
+                     (change)="sendCmd('pv',[raspiconfig().preview_quality, raspiconfig().preview_width, raspiconfig().preview_divider])">
+                </div>
+            </div>
+        </div>
+        <div class="row g-3">
+            <label class="col col-form-label">Raw Layer, default: 'off'</label>
+            <div class="col">
+                <select class="form-select form-select-sm" (change)="sendCmd('rl',raspiconfig().raw_layer)" name="raw_layer" [(ngModel)]="raspiconfig().raw_layer">
+                    <option value="0">Off</option>
+                    <option value="1">On</option>
+                </select>
+            </div>
+        </div>
+        <div class="row g-3">
+            <label class="col col-form-label">Video bitrate (0...25000000), default 17000000:</label>
+            <div class="col">
+                <input class="form-control form-control-sm " name="video_bitrate" type="number" min="0" max="25000000" step="1" [(ngModel)]="raspiconfig().video_bitrate"
+                 (change)="sendCmd('bi',raspiconfig().video_bitrate)">
+            </div>
+        </div>
+        <div class="row row-col-3 g-3">
+                <label class="col col-form-label">Minimise frag (0/1), default 0</label>
+                <label class="col col-form-label">Init Quantisation, default 25</label>
+                <label class="col col-form-label">Encoding qp, default 31</label>
+        </div>
+        <div class="row row-col-3 g-3 text-end mb-2">
+            <div class="col">
+                <div class="input-group input-group-sm">
+                    <span class="input-group-text">Frag</span>
+                    <input class="form-control form-control-sm " name="minimise_frag" type="number" min="0" max="1" step="1" [(ngModel)]="raspiconfig().minimise_frag"
+                     (change)="sendCmd('qp',[raspiconfig().minimise_frag, raspiconfig().initial_quant, raspiconfig().encode_qp])">
+                </div>
+            </div>
+            <div class="col">
+                <div class="input-group input-group-sm">
+                    <span class="input-group-text">Quant</span>
+                    <input class="form-control form-control-sm " name="initial_quant" type="number" min="0" step="1" [(ngModel)]="raspiconfig().initial_quant"
+                     (change)="sendCmd('qp',[raspiconfig().minimise_frag, raspiconfig().initial_quant ,raspiconfig().encode_qp])">
+                </div>
+            </div>
+            <div class="col">
+                <div class="input-group input-group-sm">
+                    <span class="input-group-text">QP</span>
+                    <input class="form-control form-control-sm " name="encode_qp" type="number" min="0" step="1" [(ngModel)]="raspiconfig().encode_qp"
+                     (change)="sendCmd('qp',[raspiconfig().minimise_frag, raspiconfig().initial_quant , raspiconfig().encode_qp])">
+                </div>
+            </div>
+        </div>
+        <div class="row g-3">
+            <label class="col col-form-label">MP4 Boxing mode : </label>
+            <div class="col">
+                <select class="form-select form-select-sm" (change)="sendCmd('bo',raspiconfig().mp4box)">
+                    <option value="0">Off</option>
+                    <option value="1" [selected]="+raspiconfig().mp4box != 0 || raspiconfig()?.mp4box == 'background'">Background</option>
+                </select>
+            </div>
+        </div>
+        <div class="row g-3">
+            <label class="col col-form-label">Watchdog, default interval 3s, errors 3s:</label>
+            <div class="col">
+                <div class="input-group input-group-sm">
+                    <span class="input-group-text">Interval</span>
+                    <input class="form-control form-control-sm " name="watchdog_interval" type="number" min="0" step="1" [(ngModel)]="raspiconfig().watchdog_interval" value="raspiconfig().watchdog_interval/10" (change)="sendCmd('wd',[(10 * +raspiconfig().watchdog_interval), raspiconfig().watchdog_errors])">
+                    <span class="input-group-text me-1">sec.</span>
+                    <span class="input-group-text">Errors</span>
+                    <input class="form-control form-control-sm " name="watchdog_errors" type="number" min="0" step="1" [(ngModel)]="raspiconfig().watchdog_errors" (change)="sendCmd('wd',[(10 * +raspiconfig().watchdog_interval), raspiconfig().watchdog_errors])">
+                </div>
+            </div>
+        </div>
+        <div class="row g-3">
+            <label class="col col-form-label">Motion detect mode:</label>
+            <div class="col">
+                <select class="form-select form-select-sm" (change)="sendCmd('mx', raspiconfig().motion_external)" name="motion_external" [(ngModel)]="raspiconfig().motion_external">
+                    <option value="0">Internal</option>
+                    <option value="1">External</option>
+                    <option value="2">Monitor</option>
+                </select>
+            </div>
+        </div>
+        <div class="row g-3">
+            <label class="col col-form-label">Log size lines, default 5000:</label>
+            <div class="col">
+                <input class="form-control form-control-sm" type="number" min="0" step="1" name="log_size" [(ngModel)]="raspiconfig().log_size" (change)="sendCmd('ls',raspiconfig().log_size)">
+            </div>
+        </div>
+        <div class="row g-3">
+            <label class="col col-form-label">HDMI Preview, default: 'off'</label>
+            <div class="col">
+                <select class="form-select form-select-sm" (change)="sendCmd('hp',raspiconfig().hdmi_preview)" name="hdmi_preview" [(ngModel)]="raspiconfig().hdmi_preview">
+                    <option value="0">Off</option>
+                    <option value="1">On</option>
+                </select>
+            </div>
+        </div>
+
+    </div>
+</div>

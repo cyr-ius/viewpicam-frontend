@@ -1,0 +1,12 @@
+<div id="streamlog" class="container-fluid overflow-auto">
+  <table class="table table-sm table-striped">
+    <thead class="thead-dark">
+    <tr><th scope="col">Date</th><th scope="col">Level</th><th scope="col">Description</th></tr>
+    </thead>
+    <tbody>
+    @for (line of logs; track $index) {
+    <tr scope="row"><td>{{line.datetime | date: 'short'}}</td><td>{{line.level}}</td><td>{{line.msg}}</td></tr>
+    }
+    </tbody>
+  </table>
+</div>
