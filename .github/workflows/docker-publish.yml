@@ -52,7 +52,7 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{github.actor}}/frontend
           labels: |
-            org.opencontainers.image.description="A web interface for the Raspberry Pi Camera module"
+            org.opencontainers.image.description=A web interface for the Raspberry Pi Camera module
             org.opencontainers.image.licenses=MIT
 
       # Build and push Docker image with Buildx (don't push on PR)
