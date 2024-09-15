@@ -73,4 +73,4 @@ jobs:
             BUILDTIME=${{ fromJSON(steps.meta.outputs.json).labels['org.opencontainers.image.created'] }}
             VERSION=${{ fromJSON(steps.meta.outputs.json).labels['org.opencontainers.image.version'] }}
             REVISION=${{ fromJSON(steps.meta.outputs.json).labels['org.opencontainers.image.revision'] }}
-          outputs: type=image,name=target,annotation-index.org.opencontainers.image.description="A web interface for the Raspberry Pi Camera module"
+          outputs: type=image,name=target,annotation-index.org.opencontainers.image.description=A web interface for the Raspberry Pi Camera module
