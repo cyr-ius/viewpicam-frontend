@@ -133,8 +133,12 @@ export class SettingsService  {
     )
   }
 
-  getLog():Observable<Log[]>{
-    return this.http.get<Log[]>(`${this.BASE_URL}/logs/`).pipe(
+  getLog(reverse:bool):Observable<Log[]>{
+    let queryParams = new HttpParams()
+    if (preset){
+      queryParams = queryParams.append("reverse",reverse);
+    }
+    return this.http.get<Log[]>(`${this.BASE_URL}/logs/`,{params: queryParams}).pipe(
       catchError((error) => this.common.handleError(error, undefined))
     )
   }
