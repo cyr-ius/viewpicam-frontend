@@ -22,7 +22,7 @@ export class LogComponent implements OnInit {
 
   ngOnInit(): void {
     this.globalSpinner.on()
-    this.settingsService.getLog().subscribe(rsp => this.logs = rsp)
+    this.settingsService.getLog(true).subscribe(rsp => this.logs = rsp)
   }
 
 }
