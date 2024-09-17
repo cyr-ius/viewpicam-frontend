@@ -133,9 +133,9 @@ export class SettingsService  {
     )
   }
 
-  getLog(reverse:bool):Observable<Log[]>{
+  getLog(reverse:boolean):Observable<Log[]>{
     let queryParams = new HttpParams()
-    if (preset){
+    if (reverse){
       queryParams = queryParams.append("reverse",reverse);
     }
     return this.http.get<Log[]>(`${this.BASE_URL}/logs/`,{params: queryParams}).pipe(
