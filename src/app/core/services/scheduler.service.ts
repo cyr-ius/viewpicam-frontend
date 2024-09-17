@@ -31,13 +31,13 @@ export class SchedulerService {
   ) {}
 
   Start(){
-    return this.http.post(`${this.BASE_URL}/schedule/start`,'').pipe(
+    return this.http.post(`${this.BASE_URL}/tasks/start`,'').pipe(
       catchError((error) => this.common.handleError(error, []))
     )
   }
 
   Stop(){
-    return this.http.post(`${this.BASE_URL}/schedule/stop`,'').pipe(
+    return this.http.post(`${this.BASE_URL}/tasks/stop`,'').pipe(
       catchError((error) => this.common.handleError(error, []))
     )
   }
