@@ -1,10 +1,10 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
+import _ from 'lodash';
 import { catchError, Observable, tap } from 'rxjs';
 import { StatusMjpeg } from '../models/app-models';
 import { BASE_URL } from '../tokens/app.token';
 import { CommonService } from './common.service';
-import _ from 'lodash';
 
 @Injectable({
   providedIn: 'root'

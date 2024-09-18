@@ -72,7 +72,7 @@ export class MjpegViewerComponent implements OnInit {
   }
 
   checkStatus() {
-    this.subscription = timer(100)
+    this.subscription = timer(250)
       .pipe(
         mergeMap(() =>
           this.raspiConfig.getStatusMjpeg(this.raspiConfig.status_mjpeg())
