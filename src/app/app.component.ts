@@ -1,4 +1,5 @@
-import { Component, effect, Renderer2 } from '@angular/core';
+import { Component, effect, inject, Renderer2 } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 import { RouterOutlet } from '@angular/router';
 import { FootbarComponent } from './components/footbar/footbar.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
@@ -15,6 +16,9 @@ import { SettingsService } from './core/services/settings.service';
   styleUrl: './app.component.css'
 })
 export class AppComponent {
+
+  title = inject(Title);
+
   constructor(
     private renderer: Renderer2,
     private settingsService: SettingsService,
@@ -25,9 +29,16 @@ export class AppComponent {
       this.renderer.setAttribute(document.querySelector('html'), 'data-bs-theme', this.settingsService.color_mode());
       if (this.authService.current_user()) {
         this.raspiConfig.getConfig().subscribe(rsp => this.raspiConfig.setConfig(rsp));
-        this.settingsService.getSetting().subscribe( rsp => this.settingsService.setConfig(rsp))
-        this.settingsService.getVersion().subscribe( rsp => this.settingsService.setVersions(rsp))
+        this.settingsService.getSetting().subscribe( (rsp) => {
+          this.settingsService.setConfig(rsp)
+        })
+        this.settingsService.getVersion().subscribe( (rsp) => {
+          this.settingsService.setVersions(rsp)
+          this.title.setTitle(`ViewPiCam (${rsp.current_version})`)
+        })
       }
     })
   }
+
+
 }
