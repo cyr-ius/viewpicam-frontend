@@ -23,14 +23,13 @@ export class CameraSettingsComponent implements OnInit {
   at_yuv: string | null = null;
   ac_yuv: string | null = null;
 
-
   constructor(
     private settingsService: SettingsService,
     private raspiConfig: RaspiconfigService
   ) {
-    effect(()=>{
+    effect(() => {
       console.log(this.settingsService.settings().upreset);
-    })
+    });
   }
 
   ngOnInit(): void {
@@ -56,7 +55,7 @@ export class CameraSettingsComponent implements OnInit {
       '#' + colorconverter.RGB2HEX(colorconverter.YUV2RGB(color_yuv));
   }
 
-  setPreset(preset: string, fps_divider:number) {
+  setPreset(preset: string, fps_divider: number) {
     this.presets.forEach((element) => {
       if (element.name == preset) {
         this.selected_preset = element;
@@ -104,8 +103,9 @@ export class CameraSettingsComponent implements OnInit {
     this.sendCmd('ac', params);
   }
 
-  switchLed() {
+  switchLed(r: number, g: number, b: number) {
     // Pipan call library
+    console.log(r,g,b)
   }
 
   sendCmd(cmd: string, params: any) {
