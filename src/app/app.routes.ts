@@ -15,7 +15,7 @@ export const routes: Routes = [
   {path:'', redirectTo:'preview', pathMatch: 'full'},
   {path:'login', component: FirstFactorComponent, title:"ViewPi Camera"},
   {path:'mfa', component: SecondFactorComponent, title:"Second factor"},
-  {path:'preview', component: PreviewComponent, canActivate: [authGuard], title: "Preview"},
+  {path:'preview', component: PreviewComponent, canActivate: [authGuard]},
   {path:'gallery/:id', component: ThumbsListComponent, canActivate: [authGuard], title: "Gallery"},
   {path:'gallery', component: ThumbsListComponent, canActivate: [authGuard], title: "Gallery"},
   {path:'multiview', component: MultiviewComponent, canActivate: [authGuard], title: "Multiview"},
