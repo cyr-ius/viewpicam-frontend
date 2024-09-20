@@ -20,7 +20,7 @@ COPY --from=build /dist/src/app/dist/frontend/browser/ /usr/share/nginx/html
 COPY ./docker/site.conf /etc/nginx/conf.d/default.conf
 
 # Set version label
-LABEL org.opencontainers.image.source="https://github.com/cyr-ius/viewpicam2"
+LABEL org.opencontainers.image.source="https://github.com/cyr-ius/viewpicam-frontend"
 LABEL org.opencontainers.image.description="Frontend Viewpicam - inspired by Rpi Cam Interface"
 LABEL org.opencontainers.image.licenses="MIT"
 LABEL maintainer="cyr-ius"
@@ -28,5 +28,4 @@ LABEL maintainer="cyr-ius"
 ARG VERSION
 ENV VERSION=${VERSION}
 
-HEALTHCHECK CMD ["wget","--output-document=-","--quiet","--tries=3","http://127.0.0.1/"]
 EXPOSE 80/tcp
