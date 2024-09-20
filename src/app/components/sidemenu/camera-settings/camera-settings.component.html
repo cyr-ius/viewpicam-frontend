@@ -8,7 +8,7 @@
         <div class="row g-3">
             <label class="col col-form-label">Load Preset</label>
             <div class="col">
-                <select class="form-select form-select-sm" (change)="setPreset(preset)" name="preset" [(ngModel)]="preset">
+                <select class="form-select form-select-sm" (change)="setPreset(preset, raspiconfig().fps_divider)" name="preset" [(ngModel)]="preset">
                     <option value="">Select option...</option>
                     @for (preset of presets; track preset) {
                     <option value="{{preset.name}}">{{preset.name}}</option>
@@ -23,13 +23,13 @@
                 <div class="row">
                     <div class="col">
                         <div class="input-group input-group-sm">
-                            <input [(ngModel)]="raspiconfig().video_width" class="form-control form-control-sm" name="video_width" type="number" step="1">
+                            <input [(ngModel)]="raspiconfig().video_width" class="form-control form-control-sm" name="video_width" type="number" min="1" step="1">
                             <span class="input-group-text">px</span>
                         </div>
                     </div> x
                     <div class="col">
                         <div class="input-group input-group-sm">
-                            <input [(ngModel)]="raspiconfig().video_height" class="form-control form-control-sm" name="video_height" type="number" step="1">
+                            <input [(ngModel)]="raspiconfig().video_height" class="form-control form-control-sm" name="video_height" type="number" min="1" step="1">
                             <span class="input-group-text">px</span>
                         </div>
                     </div>
@@ -42,13 +42,13 @@
                 <div class="row">
                     <div class="col">
                         <div class="input-group input-group-sm">
-                            <input [(ngModel)]="raspiconfig().video_fps" class="form-control form-control-sm" name="video_fps" type="number" step="1">
+                            <input [(ngModel)]="raspiconfig().video_fps" class="form-control form-control-sm" name="video_fps" type="number" min="1" step="1">
                             <span class="input-group-text">recording</span>
                         </div>
                     </div>
                     <div class="col">
                         <div class="input-group input-group-sm">
-                            <input [(ngModel)]="raspiconfig().mp4box_fps" class="form-control form-control-sm" name="mp4box_fps" type="number" step="1">
+                            <input [(ngModel)]="raspiconfig().mp4box_fps" class="form-control form-control-sm" name="mp4box_fps" type="number" min="1" step="1">
                             <span class="input-group-text">boxing</span>
                         </div>
                     </div>
@@ -58,7 +58,7 @@
         <div class="row g-3">
             <label class="col col-form-label">FPS divider</label>
             <div class="col">
-                <input [(ngModel)]="raspiconfig().fps_divider" class="form-control form-control-sm" name="fps_divider" type="number" step="1">
+                <input [(ngModel)]="raspiconfig().fps_divider" class="form-control form-control-sm" name="fps_divider" type="number" min="1" step="1">
             </div>
         </div>
         <div class="row g-3">
@@ -67,13 +67,13 @@
                 <div class="row">
                     <div class="col">
                         <div class="input-group input-group-sm">
-                            <input [(ngModel)]="raspiconfig().image_width"  class="form-control form-control-sm" name="image_width" type="number" step="1">
+                            <input [(ngModel)]="raspiconfig().image_width"  class="form-control form-control-sm" name="image_width" type="number" min="1" step="1">
                             <span class="input-group-text">px</span>
                         </div>
                     </div> x
                     <div class="col">
                         <div class="input-group input-group-sm">
-                            <input [(ngModel)]="raspiconfig().image_height" class="form-control form-control-sm" name="image_height" type="number" step="1">
+                            <input [(ngModel)]="raspiconfig().image_height" class="form-control form-control-sm" name="image_height" type="number" min="1" step="1">
                             <span class="input-group-text">px</span>
                         </div>
                     </div>
@@ -437,21 +437,21 @@
                 <div class="input-group input-group-sm">
                     <span class="input-group-text">Quality</span>
                     <input class="form-control form-control-sm " name="quality" type="number" min="1" max="100" step="1" [(ngModel)]="raspiconfig().quality"
-                     (change)="sendCmd('pv',[raspiconfig().preview_quality, raspiconfig().preview_width, raspiconfig().preview_divider])">
+                     (change)="sendCmd('pv',[raspiconfig().quality, raspiconfig().width, raspiconfig().divider])">
                 </div>
             </div>
             <div class="col">
                 <div class="input-group input-group-sm">
                     <span class="input-group-text">Width</span>
                     <input class="form-control form-control-sm " name="width" type="number" min="128" max="1024" step="1" [(ngModel)]="raspiconfig().width"
-                     (change)="sendCmd('pv',[raspiconfig().preview_quality, raspiconfig().preview_width, raspiconfig().preview_divider])">
+                     (change)="sendCmd('pv',[raspiconfig().quality, raspiconfig().width, raspiconfig().divider])">
                 </div>
             </div>
             <div class="col">
                 <div class="input-group input-group-sm">
                     <span class="input-group-text">Divider</span>
                     <input class="form-control form-control-sm " name="divider" type="number" min="1" max="16" step="1" [(ngModel)]="raspiconfig().divider"
-                     (change)="sendCmd('pv',[raspiconfig().preview_quality, raspiconfig().preview_width, raspiconfig().preview_divider])">
+                     (change)="sendCmd('pv',[raspiconfig().quality, raspiconfig().width, raspiconfig().divider])">
                 </div>
             </div>
         </div>
