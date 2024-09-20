@@ -43,6 +43,4 @@ export class CommonService {
     document.body.appendChild(downloadLink);
     downloadLink.click();
   }
-
-
 }

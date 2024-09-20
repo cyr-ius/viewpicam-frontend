@@ -9,8 +9,6 @@ import { ModalUploadComponent } from '../../modals/modal-upload/modal-upload.com
   templateUrl: './motion-external.component.html'
 })
 export class MotionExternalComponent {
-
-motion_ready = false
-show_all = false
-
+  motion_ready = false
+  show_all = false
 }

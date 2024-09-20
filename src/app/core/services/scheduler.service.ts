@@ -118,5 +118,4 @@ export class SchedulerService {
       catchError((error) => this.common.handleError(error, []))
     )
   }
-
 }

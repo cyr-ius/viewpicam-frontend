@@ -122,5 +122,4 @@ export class ThumbsService {
       catchError((error) => this.common.handleError(error, undefined))
     )
   }
-
 }

@@ -21,6 +21,4 @@ export class GlobalSpinnerService {
   off(){
     this.Spinner.set(false);
   }
-
-
 }

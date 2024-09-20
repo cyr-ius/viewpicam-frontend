@@ -2,7 +2,7 @@ import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 import { effect, inject, Injectable, signal } from '@angular/core';
 import { NavigationStart, Router } from '@angular/router';
 import { catchError, Observable } from 'rxjs';
-import { ApiToken, CamToken, FreeDisk, Log, Macros, Multiview, Preset, Rsync, Settings, User, UserButton, UserLevel } from '../models/app-models';
+import { Log, Macros, Multiview, Preset, Rsync, Settings, User, UserButton, UserLevel } from '../models/app-models';
 import { BASE_URL } from '../tokens/app.token';
 import { CommonService } from './common.service';
 
@@ -67,7 +67,6 @@ export class SettingsService  {
         this.menuId.set(menu);
       }
     })
-
   }
 
   setDisplayMode(state:boolean){
@@ -272,5 +271,4 @@ export class SettingsService  {
       catchError((error) => this.common.handleError(error, {}))
     )
   }
-
 }

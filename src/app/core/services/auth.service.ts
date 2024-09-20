@@ -46,7 +46,7 @@ export class AuthService {
       return of();
     }
     return this.http.get<void>(`${this.BASE_URL}/idp/logout`).pipe(
-      tap((data) => {
+      tap(() => {
         this.currentUser.set(null);
         this.router.navigate(['login']);
       })

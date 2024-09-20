@@ -32,7 +32,7 @@ export class StreamService {
         observer.next(event.data);
       };
 
-      this.eventSource.onerror = (error) => {
+      this.eventSource.onerror = () => {
         this.eventSource?.close();
         // To reconnect after connection closes
         this.reconnect(observer);
@@ -50,5 +50,4 @@ export class StreamService {
   private reconnect(observer: any): void {
     this.getStream().subscribe(observer);
   }
-
 }

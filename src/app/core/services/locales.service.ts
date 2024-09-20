@@ -27,5 +27,4 @@ export class LocalesService {
       catchError((error)=> this.common.handleError(error, undefined))
     )
   }
-
 }
