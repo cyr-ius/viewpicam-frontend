@@ -1,6 +1,6 @@
 import { Injectable, signal } from '@angular/core';
-import { Schedule, ScheduleService } from '../../generator';
-import { SchedulerWithCalendars } from '../../generator/model/schedulerWithCalendars';
+import { Schedule, ScheduleService } from '../../client';
+import { SchedulerWithCalendars } from '../../client/model/schedulerWithCalendars';
 
 @Injectable({
   providedIn: 'root',

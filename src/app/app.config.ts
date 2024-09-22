@@ -4,9 +4,9 @@ import { provideRouter } from '@angular/router';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { environment } from '../environments/environment';
 import { routes } from './app.routes';
+import { BASE_PATH } from './client';
 import { globalSpinnerInterceptor } from './core/interceptors/global-spinner.interceptor';
 import { AUTOREFRESH, BASE_URL, PREVIEW_DELAY, TIME_FILTER_MAX } from './core/tokens/app.token';
-import { BASE_PATH } from './generator';
 
 export const appConfig: ApplicationConfig = {
   providers: [

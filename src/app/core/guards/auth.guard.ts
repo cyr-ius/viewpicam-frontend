@@ -1,7 +1,7 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { IdpService } from '../../generator';
+import { IdpService } from '../../client';
 import { SignalsAuthService } from '../signals/signals-auth.service';
 
 export const authGuard: CanActivateFn = (_route, _state) => {

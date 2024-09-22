@@ -1,5 +1,5 @@
 import { effect, Injectable, signal } from '@angular/core';
-import { Files as files } from '../../generator';
+import { Files as files } from '../../client';
 
 type Files = files & { selected?: boolean | null };
 

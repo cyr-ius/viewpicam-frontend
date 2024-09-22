@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { CameraToken, IdpService } from '../../../client';
 import { CommonService } from '../../../core/services/common.service';
-import { CameraToken, IdpService } from '../../../generator';
 
 @Component({
   selector: 'app-camera-token',

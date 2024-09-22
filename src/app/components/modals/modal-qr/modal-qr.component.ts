@@ -1,7 +1,7 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { OtpService, Secret, UserPublic } from '../../../client';
 import { SafeHtmlPipe } from '../../../core/pipes/safe-html.pipe';
-import { OtpService, Secret, UserPublic } from '../../../generator';
 
 @Component({
   selector: 'app-modal-qr',

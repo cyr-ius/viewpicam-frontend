@@ -2,10 +2,10 @@ import { CommonModule } from '@angular/common';
 import { Component, ViewChild } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import {
-  SystemService,
-  UserLevel,
-  UserPublic, UsersService
-} from '../../../generator';
+    SystemService,
+    UserLevel,
+    UserPublic, UsersService
+} from '../../../client';
 import { ModalQrComponent } from '../../modals/modal-qr/modal-qr.component';
 
 type User = UserPublic & { password?: string | null };

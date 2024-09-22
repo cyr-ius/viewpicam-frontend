@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Command, Macro, RaspiconfigService, SettingsService } from '../../../client';
 import { ReplacePipe } from '../../../core/pipes/replace.pipe';
-import { Command, Macro, RaspiconfigService, SettingsService } from '../../../generator';
 
 @Component({
   selector: 'app-adm-macros',

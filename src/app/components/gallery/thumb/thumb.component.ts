@@ -2,9 +2,9 @@ import { CommonModule } from '@angular/common';
 import { Component, computed, input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
+import { Files as files, PreviewsService } from '../../../client';
 import { SignalsRaspiconfigService } from '../../../core/signals/signals-raspiconfig.service';
 import { SignalsThumbsService } from '../../../core/signals/signals-thumbs.service';
-import { Files as files, PreviewsService } from '../../../generator';
 
 type Files = files & { selected?: boolean | null };
 

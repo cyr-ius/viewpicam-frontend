@@ -1,5 +1,5 @@
 import { Injectable, signal } from '@angular/core';
-import { UserPublic } from '../../generator';
+import { UserPublic } from '../../client';
 
 @Injectable({
   providedIn: 'root',

@@ -1,8 +1,8 @@
 import { AsyncPipe } from '@angular/common';
 import { Component, computed } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { ButtonsService } from '../../client';
 import { SignalsSettingsService } from '../../core/signals/signals-settings.service';
-import { ButtonsService } from '../../generator';
 import { CameraSettingsComponent } from '../sidemenu/camera-settings/camera-settings.component';
 import { MotionExternalComponent } from '../sidemenu/motion-external/motion-external.component';
 import { MotionInternalComponent } from '../sidemenu/motion-internal/motion-internal.component';

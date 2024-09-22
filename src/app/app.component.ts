@@ -1,13 +1,13 @@
 import { Component, effect, inject, Renderer2 } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { RouterOutlet } from '@angular/router';
+import { RaspiconfigService, SettingsService, SystemService } from './client';
 import { FootbarComponent } from './components/footbar/footbar.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { ToastComponent } from './components/toast/toast.component';
 import { SignalsAuthService } from './core/signals/signals-auth.service';
 import { SignalsRaspiconfigService } from './core/signals/signals-raspiconfig.service';
 import { SignalsSettingsService } from './core/signals/signals-settings.service';
-import { RaspiconfigService, SettingsService, SystemService } from './generator';
 
 
 

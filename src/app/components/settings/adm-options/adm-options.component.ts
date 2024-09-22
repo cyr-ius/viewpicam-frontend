@@ -1,11 +1,11 @@
 import { Component, computed, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import _ from 'lodash';
-import { SignalsSettingsService } from '../../../core/signals/signals-settings.service';
 import {
-  SettingsService,
-  SystemService,
-} from '../../../generator';
+    SettingsService,
+    SystemService,
+} from '../../../client';
+import { SignalsSettingsService } from '../../../core/signals/signals-settings.service';
 @Component({
   selector: 'app-adm-options',
   standalone: true,

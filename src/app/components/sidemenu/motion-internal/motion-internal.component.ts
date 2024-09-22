@@ -1,8 +1,8 @@
 import { Component, computed } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Command, RaspiconfigService } from '../../../client';
 import { SignalsRaspiconfigService } from '../../../core/signals/signals-raspiconfig.service';
 import { SignalsSettingsService } from '../../../core/signals/signals-settings.service';
-import { Command, RaspiconfigService } from '../../../generator';
 
 @Component({
   selector: 'app-motion-internal',

@@ -1,7 +1,7 @@
 import { AsyncPipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
-import { ButtonPublic, ButtonsService } from '../../../generator';
+import { ButtonPublic, ButtonsService } from '../../../client';
 
 
 @Component({

@@ -1,8 +1,8 @@
 import { Component, computed, effect } from '@angular/core';
+import { Command, RaspiconfigService } from '../../../client';
 import { SignalsAuthService } from '../../../core/signals/signals-auth.service';
 import { SignalsRaspiconfigService } from '../../../core/signals/signals-raspiconfig.service';
 import { SignalsSettingsService } from '../../../core/signals/signals-settings.service';
-import { Command, RaspiconfigService } from '../../../generator';
 
 export interface MainButton {
   disable: boolean;

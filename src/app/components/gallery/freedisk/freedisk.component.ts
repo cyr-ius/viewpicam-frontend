@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FreeDisk, SystemService } from '../../../generator';
+import { FreeDisk, SystemService } from '../../../client';
 
 @Component({
   selector: 'app-freedisk',

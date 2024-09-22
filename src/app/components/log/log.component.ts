@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, computed, OnInit } from '@angular/core';
+import { Log, LogsService } from '../../client';
 import { GlobalSpinnerService } from '../../core/services/global-spinner.service';
-import { Log, LogsService } from '../../generator';
 
 @Component({
   selector: 'app-log',

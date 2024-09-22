@@ -4,10 +4,10 @@ import { Component, computed, OnInit, ViewChild } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { finalize, Observable, retry, tap, timer } from 'rxjs';
+import { IdpService, Login, TokenInfo } from '../../client';
 import { CommonService } from '../../core/services/common.service';
 import { GlobalSpinnerService } from '../../core/services/global-spinner.service';
 import { SignalsAuthService } from '../../core/signals/signals-auth.service';
-import { IdpService, Login, TokenInfo } from '../../generator';
 import { SecondFactorComponent } from '../second-factor/second-factor.component';
 
 

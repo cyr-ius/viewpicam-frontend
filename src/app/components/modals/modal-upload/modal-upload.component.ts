@@ -1,7 +1,7 @@
 import { Component, ElementRef, inject, OnInit, viewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { SettingsService } from '../../../client';
 import { BASE_URL } from '../../../core/tokens/app.token';
-import { SettingsService } from '../../../generator';
 
 @Component({
   selector: 'app-modal-upload',

@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { MultiviewPublic, MultiviewService } from '../../../generator';
+import { MultiviewPublic, MultiviewService } from '../../../client';
 
 @Component({
   selector: 'app-adm-multiview',

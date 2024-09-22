@@ -3,14 +3,6 @@ import { HttpClient } from '@angular/common/http';
 import { Component, computed, inject } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { Subscription, tap } from 'rxjs';
-import { CommonService } from '../../core/services/common.service';
-import { GlobalSpinnerService } from '../../core/services/global-spinner.service';
-import { SignalsAuthService } from '../../core/signals/signals-auth.service';
-import { SignalsRaspiconfigService } from '../../core/signals/signals-raspiconfig.service';
-import { SignalsSchedulerService } from '../../core/signals/signals-scheduler.service';
-import { SignalsSettingsService } from '../../core/signals/signals-settings.service';
-import { SignalsThumbsService } from '../../core/signals/signals-thumbs.service';
-import { BASE_URL } from '../../core/tokens/app.token';
 import {
   Files,
   IdpService,
@@ -20,7 +12,15 @@ import {
   SettingsService,
   SystemService,
   TasksService
-} from '../../generator';
+} from '../../client';
+import { CommonService } from '../../core/services/common.service';
+import { GlobalSpinnerService } from '../../core/services/global-spinner.service';
+import { SignalsAuthService } from '../../core/signals/signals-auth.service';
+import { SignalsRaspiconfigService } from '../../core/signals/signals-raspiconfig.service';
+import { SignalsSchedulerService } from '../../core/signals/signals-scheduler.service';
+import { SignalsSettingsService } from '../../core/signals/signals-settings.service';
+import { SignalsThumbsService } from '../../core/signals/signals-thumbs.service';
+import { BASE_URL } from '../../core/tokens/app.token';
 import { ModalUploadComponent } from '../modals/modal-upload/modal-upload.component';
 
 @Component({

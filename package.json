@@ -7,7 +7,7 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "openapi-generator": "npx @openapitools/openapi-generator-cli generate -i http://localhost:8000/api/v1/openapi.json -g typescript-angular --additional-properties=disallowAdditionalPropertiesIfNotPresent=true -o ./src/app/generator/"
+    "openapi-generator": "npx @openapitools/openapi-generator-cli generate -i http://localhost:8000/api/v1/openapi.json -g typescript-angular --additional-properties=disallowAdditionalPropertiesIfNotPresent=true -o ./src/app/client/"
   },
   "private": true,
   "dependencies": {

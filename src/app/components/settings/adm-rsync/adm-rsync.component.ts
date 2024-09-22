@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
-import { Rsync, RsyncService } from '../../../generator';
+import { Rsync, RsyncService } from '../../../client';
 
 @Component({
   selector: 'app-adm-rsync',

@@ -3,10 +3,10 @@ import { HttpClient } from '@angular/common/http';
 import { Component, computed, effect, ElementRef, inject, Inject, Injector, OnInit, viewChild } from '@angular/core';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { map, mergeMap, Subscription, timer } from 'rxjs';
+import { RaspiconfigService } from '../../../client';
 import { SignalsRaspiconfigService } from '../../../core/signals/signals-raspiconfig.service';
 import { SignalsSettingsService } from '../../../core/signals/signals-settings.service';
 import { BASE_URL } from '../../../core/tokens/app.token';
-import { RaspiconfigService } from '../../../generator';
 
 @Component({
   selector: 'app-mjpeg-viewer',

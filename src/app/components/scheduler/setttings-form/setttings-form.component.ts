@@ -2,9 +2,9 @@ import { AsyncPipe } from '@angular/common';
 import { Component, computed, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Observable, tap } from 'rxjs';
+import { ScheduleService } from '../../../client';
 import { SignalsRaspiconfigService } from '../../../core/signals/signals-raspiconfig.service';
 import { SignalsSchedulerService } from '../../../core/signals/signals-scheduler.service';
-import { ScheduleService } from '../../../generator';
 
 
 @Component({

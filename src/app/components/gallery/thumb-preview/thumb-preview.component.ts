@@ -1,8 +1,8 @@
 import { Component, computed, ElementRef, OnInit, viewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Files, PreviewsService } from '../../../client';
 import { SignalsRaspiconfigService } from '../../../core/signals/signals-raspiconfig.service';
 import { SignalsThumbsService } from '../../../core/signals/signals-thumbs.service';
-import { Files, PreviewsService } from '../../../generator';
 import { ThumbsListComponent } from '../thumbs-list.component';
 
 @Component({

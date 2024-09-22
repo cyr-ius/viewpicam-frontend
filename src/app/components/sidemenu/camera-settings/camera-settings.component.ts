@@ -1,9 +1,9 @@
 import { Component, computed, effect, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import * as colorconverter from '../../../../../src/scripts/colorconverter.js';
+import { Command, Presets, RaspiconfigService, SystemService } from '../../../client/index.js';
 import { SignalsRaspiconfigService } from '../../../core/signals/signals-raspiconfig.service.js';
 import { SignalsSettingsService } from '../../../core/signals/signals-settings.service.js';
-import { Command, Presets, RaspiconfigService, SystemService } from '../../../generator';
 
 @Component({
   selector: 'app-camera-settings',

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Locale, SystemService, UsersService } from '../../generator';
+import { Locale, SystemService, UsersService } from '../../client';
 
 @Component({
   selector: 'app-theme-language',

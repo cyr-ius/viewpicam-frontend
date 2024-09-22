@@ -1,10 +1,10 @@
 import { AsyncPipe } from '@angular/common';
 import { Component, computed, effect, ElementRef, inject, OnInit, viewChild } from '@angular/core';
 import { repeat, tap } from 'rxjs';
+import { PreviewsService } from '../../client';
 import { GlobalSpinnerService } from '../../core/services/global-spinner.service';
 import { SignalsThumbsService } from '../../core/signals/signals-thumbs.service';
 import { AUTOREFRESH } from '../../core/tokens/app.token';
-import { PreviewsService } from '../../generator';
 import { FreediskComponent } from './freedisk/freedisk.component';
 import { ThumbListOrderingComponent } from './thumb-list-ordering/thumb-list-ordering.component';
 import { ThumbPreviewComponent } from './thumb-preview/thumb-preview.component';

@@ -1,8 +1,8 @@
 import { AsyncPipe, CommonModule } from '@angular/common';
 import { Component, computed, OnInit } from '@angular/core';
 import { interval, Subscription } from 'rxjs';
+import { ScheduleService, TasksService } from '../../../client';
 import { SignalsSchedulerService } from '../../../core/signals/signals-scheduler.service';
-import { ScheduleService, TasksService } from '../../../generator';
 
 @Component({
   selector: 'app-current-state',

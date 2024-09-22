@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
-import { ButtonPublic, ButtonsService } from '../../../generator';
+import { ButtonPublic, ButtonsService } from '../../../client';
 
 @Component({
   selector: 'app-adm-user-buttons',

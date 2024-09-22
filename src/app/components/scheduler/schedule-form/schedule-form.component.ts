@@ -2,8 +2,8 @@ import { CommonModule } from '@angular/common';
 import { Component, computed, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { tap } from 'rxjs';
+import { ScheduleService } from '../../../client';
 import { SignalsSchedulerService } from '../../../core/signals/signals-scheduler.service';
-import { ScheduleService } from '../../../generator';
 
 
 @Component({

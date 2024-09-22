@@ -1,7 +1,7 @@
 import { Component, computed } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { SettingsService as ClientService } from '../../../client';
 import { SignalsSettingsService } from '../../../core/signals/signals-settings.service';
-import { SettingsService as ClientService } from '../../../generator';
 
 @Component({
   selector: 'app-log-level-mode',
