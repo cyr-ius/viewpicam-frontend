@@ -19,6 +19,12 @@ export class CommonService {
     return of(errorValue);
   }
 
+  handleErrorDetail(message: string, errorValue: any) {
+    this.Toast.add(<ToastMessage>{ type: 'ERROR', message: message });
+    return of(errorValue);
+  }
+
+
   copyToClipboard(value: string | null | undefined) {
     if (value) {
       navigator.clipboard

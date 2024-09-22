@@ -7,12 +7,13 @@ import { routes } from './app.routes';
 import { BASE_PATH } from './client';
 import { globalSpinnerInterceptor } from './core/interceptors/global-spinner.interceptor';
 import { AUTOREFRESH, BASE_URL, PREVIEW_DELAY, TIME_FILTER_MAX } from './core/tokens/app.token';
+import { handleErrorInterceptor } from './core/interceptors/handle-error.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
-    provideHttpClient(withInterceptors([globalSpinnerInterceptor])),
+    provideHttpClient(withInterceptors([globalSpinnerInterceptor, handleErrorInterceptor])),
     { provide: BASE_PATH, useValue: environment.API_BASE_PATH },
     { provide: BASE_URL, useValue: '/api/v1' },
     { provide: TIME_FILTER_MAX, useValue: 8 },
