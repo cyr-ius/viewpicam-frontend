@@ -183,13 +183,14 @@ export class SettingsService {
 
     /**
      * Get Backup
+     * Get backup.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public settingsGetBackup(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public settingsGetBackup(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public settingsGetBackup(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
-    public settingsGetBackup(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public settingsGetBackup(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/zip', context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public settingsGetBackup(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/zip', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public settingsGetBackup(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/zip', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public settingsGetBackup(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/zip', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -209,7 +210,7 @@ export class SettingsService {
         if (localVarHttpHeaderAcceptSelected === undefined) {
             // to determine the Accept header
             const httpHeaderAccepts: string[] = [
-                'application/json'
+                'application/zip'
             ];
             localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
         }
@@ -502,6 +503,7 @@ export class SettingsService {
 
     /**
      * Post Restore
+     * Upload backup file.
      * @param file 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -585,6 +587,106 @@ export class SettingsService {
         }
 
         let localVarPath = `/api/v1/settings/restore`;
+        return this.httpClient.request<any>('post', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: localVarConvertFormParamsToString ? localVarFormParams.toString() : localVarFormParams,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Post Restore1
+     * Upload backup file.
+     * @param file 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public settingsPostRestore1(file: Blob, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public settingsPostRestore1(file: Blob, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public settingsPostRestore1(file: Blob, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public settingsPostRestore1(file: Blob, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (file === null || file === undefined) {
+            throw new Error('Required parameter file was null or undefined when calling settingsPostRestore1.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (APIKeyCookie) required
+        localVarCredential = this.configuration.lookupCredential('APIKeyCookie');
+        if (localVarCredential) {
+        }
+
+        // authentication (HTTPBearer) required
+        localVarCredential = this.configuration.lookupCredential('HTTPBearer');
+        if (localVarCredential) {
+            localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
+        }
+
+        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json'
+            ];
+            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        let localVarHttpContext: HttpContext | undefined = options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+        let localVarTransferCache: boolean | undefined = options && options.transferCache;
+        if (localVarTransferCache === undefined) {
+            localVarTransferCache = true;
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'multipart/form-data'
+        ];
+
+        const canConsumeForm = this.canConsumeForm(consumes);
+
+        let localVarFormParams: { append(param: string, value: any): any; };
+        let localVarUseForm = false;
+        let localVarConvertFormParamsToString = false;
+        // use FormData to transmit files using content-type "multipart/form-data"
+        // see https://stackoverflow.com/questions/4007969/application-x-www-form-urlencoded-or-multipart-form-data
+        localVarUseForm = canConsumeForm;
+        if (localVarUseForm) {
+            localVarFormParams = new FormData();
+        } else {
+            localVarFormParams = new HttpParams({encoder: this.encoder});
+        }
+
+        if (file !== undefined) {
+            localVarFormParams = localVarFormParams.append('file', <any>file) as any || localVarFormParams;
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/api/v1/settings/restore1`;
         return this.httpClient.request<any>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
