@@ -17,7 +17,7 @@
             </div>
             <div class="modal-footer">
                 <button class="btn btn-secondary" id="cancel" type="button" data-bs-dismiss="modal" i18n>Cancel</button>
-                <button class="btn btn-primary" id="upload" type="button" i18n (click)="onUpload()" [disabled]="uploadingFile">
+                <button class="btn btn-primary" id="upload" type="button" i18n (click)="onSubmit()" [disabled]="uploadingFile">
                   <span class="spinner-border spinner-border-sm" aria-hidden="true" [hidden]="!uploadingFile"></span>
                   <span class="visually-hidden" role="status">Restoring...</span>
                 Upload</button>

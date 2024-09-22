@@ -23,7 +23,6 @@ import {
 } from '../../generator';
 import { ModalUploadComponent } from '../modals/modal-upload/modal-upload.component';
 
-
 @Component({
   selector: 'app-navbar',
   standalone: true,
@@ -40,22 +39,22 @@ export class NavbarComponent {
   BASE_URL = inject(BASE_URL);
 
   constructor(
-    private signalRaspiconfig: SignalsRaspiconfigService,
-    private http: HttpClient,
     private common: CommonService,
     private globalSpinner: GlobalSpinnerService,
-    private router: Router,
+    private http: HttpClient,
     private idp: IdpService,
-    private system: SystemService,
-    private settings: SettingsService,
-    private previews: PreviewsService,
     private logs: LogsService,
-    private tasks: TasksService,
+    private previews: PreviewsService,
+    private router: Router,
     private schedule: ScheduleService,
+    private settings: SettingsService,
+    private signalAuth: SignalsAuthService,
+    private signalRaspiconfig: SignalsRaspiconfigService,
     private signalSchedule: SignalsSchedulerService,
     private signalSettings: SignalsSettingsService,
     private signalThumbs: SignalsThumbsService,
-    private signalAuth: SignalsAuthService
+    private system: SystemService,
+    private tasks: TasksService
   ) {}
 
   spinner: boolean = false;
@@ -126,25 +125,21 @@ export class NavbarComponent {
   deleteThumb() {
     let currenThumb = this.current_thumb();
     if (currenThumb && currenThumb.id && confirm('Are you sure to delete ?')) {
-      this.previews
-        .previewsDeleteThumb(currenThumb.id)
-        .subscribe(() => {
-          this.signalThumbs.setDisplayPreview(false);
-          this.signalThumbs.removeThumbs(currenThumb);
-          this.router.navigate(['gallery']);
-        });
+      this.previews.previewsDeleteThumb(currenThumb.id).subscribe(() => {
+        this.signalThumbs.setDisplayPreview(false);
+        this.signalThumbs.removeThumbs(currenThumb);
+        this.router.navigate(['gallery']);
+      });
     }
   }
 
   downloadThumb() {
-    const media_path = this.signalRaspiconfig.media_path();
-    this.http
-      .get(media_path + '/' + this.current_thumb()!.realname, {
-        responseType: 'blob',
-      })
-      .subscribe((data) =>
-        this.common.downLoadFile(data, this.current_thumb()!.realname)
-      );
+    const mediaPath = this.signalRaspiconfig.media_path();
+    const filename = this.current_thumb()!.realname;
+    const filePath = `${mediaPath}/${filename}`;
+    this.http.get(filePath, { responseType: 'blob' }).subscribe(
+      (data: any) => this.common.downLoadFile(data, filename)
+    )
   }
 
   Lock() {
@@ -181,9 +176,9 @@ export class NavbarComponent {
     this.selectedThumbs.forEach((item) => {
       if (item.id) ids.push(item.id);
     });
-    this.http
-      .post(`${this.BASE_URL}/previews/zipfile`, ids, { responseType: 'blob' })
-      .subscribe((data) => this.common.downLoadFile(data, 'DataZip.zip'));
+    this.previews.previewsPostZipfile(ids).subscribe(
+      (data) => this.common.downLoadFile(data, "raw_data.zip")
+    )
   }
 
   deletedSelected() {
@@ -217,7 +212,7 @@ export class NavbarComponent {
   downloadLog() {
     this.logs
       .logsDownload()
-      .subscribe((data) => this.common.downLoadFile(data, 'ViewpiCam.log'));
+      .subscribe((data) => this.common.downLoadFile(data,"viewpicam.log"))
   }
 
   saveSettings() {
@@ -262,12 +257,16 @@ export class NavbarComponent {
   }
 
   onBackup() {
-    this.settings.settingsGetBackup().subscribe((data) => {
-      this.common.downLoadFile(data, 'Settings.zip');
-    });
+    this.settings.settingsGetBackup().subscribe({
+      next: (data)=> this.common.downLoadFile(data, "settings.zip"),
+      error: (error) => console.error(error)
+  });
+
+
   }
 
   get selectedThumbs() {
     return this.signalThumbs.list_thumbs().filter((item) => item.selected);
   }
+
 }
