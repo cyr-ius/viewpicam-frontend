@@ -1,23 +1,23 @@
 import { Component, computed } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { SettingsService } from '../../../core/services/settings.service';
+import { SignalsSettingsService } from '../../../core/signals/signals-settings.service';
+import { SettingsService as ClientService } from '../../../generator';
 
 @Component({
   selector: 'app-log-level-mode',
   standalone: true,
   imports: [FormsModule],
-  templateUrl: './log-level-mode.component.html'
+  templateUrl: './log-level-mode.component.html',
 })
 export class LogLevelModeComponent {
-
-  settings = computed(()=> this.settingsService.settings())
+  settings = computed(() => this.signalSettings.settings());
 
   constructor(
-    public settingsService: SettingsService
-  ){}
+    private signalSettings: SignalsSettingsService,
+    public SettingsService: ClientService
+  ) {}
 
-  onChange(){
-    this.settingsService.setSetting(this.settings()).subscribe()
+  onChange() {
+    this.SettingsService.settingsPost(this.settings()).subscribe();
   }
-
 }

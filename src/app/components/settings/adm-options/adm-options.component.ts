@@ -1,35 +1,38 @@
 import { Component, computed, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import _ from 'lodash';
-import { SettingsService } from '../../../core/services/settings.service';
-
+import { SignalsSettingsService } from '../../../core/signals/signals-settings.service';
+import {
+  SettingsService,
+  SystemService,
+} from '../../../generator';
 @Component({
   selector: 'app-adm-options',
   standalone: true,
   imports: [FormsModule],
-  templateUrl: './adm-options.component.html'
+  templateUrl: './adm-options.component.html',
 })
-export class AdmOptionsComponent implements OnInit{
-
-  presets!: string[]
-  settings = computed(()=> this.settingsService.settings())
+export class AdmOptionsComponent implements OnInit {
+  presets!: string[];
+  settings = computed(() => this.signalSettings.settings());
 
   constructor(
-    private settingsService:SettingsService
-  ){}
+    private signalSettings: SignalsSettingsService,
+    private settingsService: SettingsService,
+    private SystemService: SystemService
+  ) {}
 
   ngOnInit(): void {
-    this.settingsService.getPresets().subscribe(
-      rsp => {
-        let modes: string[] = [];
-        rsp.forEach(item => modes.push(item.mode));
-        this.presets = _.uniq(modes);
-      }
-    )
+    this.SystemService.systemGetPresets().subscribe((rsp) => {
+      let modes: string[] = [];
+      rsp.forEach((item) => modes.push(item.mode));
+      this.presets = _.uniq(modes);
+    });
   }
 
-  onChange(){
-    this.settingsService.setSetting(this.settings()).subscribe()
+  onChange() {
+    this.settingsService
+      .settingsPost(this.settings())
+      .subscribe();
   }
-
 }

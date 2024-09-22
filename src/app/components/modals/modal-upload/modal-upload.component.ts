@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnInit, viewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { SettingsService } from '../../../core/services/settings.service';
-import bootstrap from 'bootstrap';
+
+import { SettingsService } from '../../../generator';
 
 @Component({
   selector: 'app-modal-upload',
@@ -19,11 +19,11 @@ export class ModalUploadComponent implements OnInit {
   el = viewChild.required<ElementRef>('uploadModal')
 
   constructor(
-    private settingsService: SettingsService
+    private settings: SettingsService
   ){}
 
   ngOnInit(): void {
-    this.el().nativeElement.addEventListener('show.bs.modal', (event: any) => {
+    this.el().nativeElement.addEventListener('show.bs.modal', () => {
       this.uploadingFile = false
     })
   }
@@ -37,13 +37,15 @@ export class ModalUploadComponent implements OnInit {
     formData.append('file', this.selectedFile, this.selectedFile.name);
     this.uploadingFile = true
 
-    this.settingsService.restoreSettings(formData).subscribe({
-      next: resp => {
-        const modal = window.bootstrap.Modal.getInstance(this.el().nativeElement)
-        modal?.hide()
-      },
-      error: error => this.message = error.message
-    })
+    // this.settings.settingsPostRestore(formData, 'body').subscribe({
+    //   next: () => {
+    //     const modal = window.bootstrap.Modal.getInstance(
+    //       this.el().nativeElement
+    //     );
+    //     modal?.hide();
+    //   },
+    //   error: (error) => (this.message = error.message),
+    // });
   }
 
 }

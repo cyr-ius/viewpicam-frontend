@@ -1,24 +1,22 @@
 import { AsyncPipe } from '@angular/common';
 import { Component, computed } from '@angular/core';
-import { AuthService } from '../../core/services/auth.service';
-import { SettingsService } from '../../core/services/settings.service';
 import { ThemeColorsComponent } from '../../core/theme-colors/theme-colors.component';
 import { ThemeLanguageComponent } from '../../core/theme-language/theme-language.component';
+import { SignalsAuthService } from '../../core/signals/signals-auth.service';
+import { SignalsSettingsService } from '../../core/signals/signals-settings.service';
 
 @Component({
   selector: 'app-footbar',
   standalone: true,
-  imports: [ThemeColorsComponent,ThemeLanguageComponent, AsyncPipe],
-  templateUrl: './footbar.component.html'
+  imports: [ThemeColorsComponent, ThemeLanguageComponent, AsyncPipe],
+  templateUrl: './footbar.component.html',
 })
 export class FootbarComponent {
-
-  current_user = computed(() => this.authService.current_user())
-  gitVersion = computed(() => this.settingsService.versions())
+  current_user = computed(() => this.signalAuth.current_user());
+  gitVersion = computed(() => this.signalSettings.versions());
 
   constructor(
-    private authService: AuthService,
-    private settingsService: SettingsService
-  ){}
-
+    private signalAuth: SignalsAuthService,
+    private signalSettings: SignalsSettingsService
+  ) {}
 }

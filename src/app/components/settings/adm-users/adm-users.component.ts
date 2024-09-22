@@ -1,61 +1,67 @@
 import { CommonModule } from '@angular/common';
 import { Component, ViewChild } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
-import { User, UserLevel } from '../../../core/models/app-models';
-import { SettingsService } from '../../../core/services/settings.service';
+import {
+  SystemService,
+  UserLevel,
+  UserPublic, UsersService
+} from '../../../generator';
 import { ModalQrComponent } from '../../modals/modal-qr/modal-qr.component';
+
+type User = UserPublic & { password?: string | null };
 
 
 @Component({
   selector: 'app-adm-users',
   standalone: true,
   imports: [FormsModule, CommonModule, ModalQrComponent],
-  templateUrl: './adm-users.component.html'
+  templateUrl: './adm-users.component.html',
 })
 export class AdmUsersComponent {
-
   @ViewChild(ModalQrComponent)
-  qrModal!: ModalQrComponent
+  qrModal!: ModalQrComponent;
 
-  userlevel = <UserLevel[]> []
-  users = <User[]> []
-  user = <User> {}
+  userlevel = <UserLevel[]>[];
+  users = <User[]>[];
+  user = <User>{};
 
   constructor(
-    private settingsService:SettingsService
-  ){}
+    private SystemService: SystemService,
+    private UsersService: UsersService
+  ) {}
 
   ngOnInit(): void {
-    this.settingsService.getUserLevel().subscribe(rsp => this.userlevel = rsp)
-    this.listUsers()
+    this.SystemService.systemGetUserlevel().subscribe(
+      (rsp) => (this.userlevel = rsp)
+    );
+    this.listUsers();
   }
 
-  delete(id:number){
-    this.settingsService.deleteUsers(id).subscribe(()=>{
-      this.listUsers()
-    })
+  delete(id: number) {
+    this.UsersService.usersDeleteUser(id).subscribe(() => {
+      this.listUsers();
+    });
   }
 
-  onSubmit(form:NgForm){
+  onSubmit(form: NgForm) {
     const formData = form.value;
-    this.settingsService.setUsers(formData).subscribe(()=> {
+    this.UsersService.usersPost(formData).subscribe(() => {
       this.listUsers();
       form.resetForm();
-    })
+    });
   }
 
-  onChange(user: User){
-    this.settingsService.updateUser(user.id, user).subscribe()
+  onChange(user: User) {
+    this.UsersService.usersPutUser(user.id, user).subscribe();
   }
 
-  listUsers(){
-    this.settingsService.getUsers().subscribe((rsp)=>{
-      this.users = rsp
-    })
+  listUsers() {
+    this.UsersService.usersGet().subscribe((rsp) => {
+      this.users = rsp;
+    });
   }
 
-  otpCheckModal(user: User){
-    this.qrModal.show(user)
-
+  otpCheckModal(user: User) {
+    if (user.otp_confirmed !== undefined) this.qrModal.show(user.otp_confirmed, user.id);
   }
 }

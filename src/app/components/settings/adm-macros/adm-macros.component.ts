@@ -1,50 +1,43 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Macros } from '../../../core/models/app-models';
 import { ReplacePipe } from '../../../core/pipes/replace.pipe';
-import { RaspiconfigService } from '../../../core/services/raspiconfig.service';
-import { SettingsService } from '../../../core/services/settings.service';
+import { Command, Macro, RaspiconfigService, SettingsService } from '../../../generator';
 
 @Component({
   selector: 'app-adm-macros',
   standalone: true,
   imports: [FormsModule, ReplacePipe, CommonModule],
-  templateUrl: './adm-macros.component.html'
+  templateUrl: './adm-macros.component.html',
 })
 export class AdmMacrosComponent {
-
-
-  macros = <Macros[]> []
-  macro = <Macros> {state:false}
+  macros = <Macro[]>[];
+  macro = <Macro>{ state: false };
 
   constructor(
-    private settingsService:SettingsService,
-    private raspiConfig: RaspiconfigService
-  ){}
+    private raspiConfig: RaspiconfigService,
+    private settings: SettingsService
+  ) {}
 
-
-  ngOnInit(): void {
-    this.listMacros()
+  ngOnInit() {
+    this.listMacros();
   }
 
-  listMacros(){
-    this.settingsService.getMacros().subscribe((rsp)=>{
-      this.macros = rsp
-    })
+  listMacros() {
+    this.settings.settingsGetMacro().subscribe((rsp) => {
+      this.macros = rsp;
+    });
   }
 
-  onChange(name:string, command:string, state:boolean){
-    this.macro.name = name
-    this.macro.command = command
-    this.macro.state = state
-    this.settingsService.setMacros(this.macro).subscribe((rsp)=>{
-      this.listMacros()
-    })
+  onChange(name: string, command: string, state: boolean) {
+    const macro = <Macro>({name:name, command: command, state: state})
+    this.settings.settingsPostMacro(macro).subscribe(() => {
+      this.listMacros();
+    });
   }
 
-  sendCmd(cmd:string,params:any){
-    this.raspiConfig.sendCmd(cmd, params);
+  sendCmd(cmd: string, params: any) {
+    const data = <Command>({ cmd: cmd, params: [params] });
+    this.raspiConfig.raspiconfigPost(data).subscribe();
   }
-
 }

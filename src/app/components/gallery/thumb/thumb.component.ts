@@ -1,48 +1,55 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, input, viewChild } from '@angular/core';
+import { Component, computed, input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { Thumb } from '../../../core/models/app-models';
-import { RaspiconfigService } from '../../../core/services/raspiconfig.service';
-import { ThumbsService } from '../../../core/services/thumbs.service';
-import { ThumbsListComponent } from '../thumbs-list.component';
+import { SignalsRaspiconfigService } from '../../../core/signals/signals-raspiconfig.service';
+import { SignalsThumbsService } from '../../../core/signals/signals-thumbs.service';
+import { Files as files, PreviewsService } from '../../../generator';
+
+type Files = files & { selected?: boolean | null };
 
 @Component({
   selector: 'app-thumb',
   standalone: true,
   imports: [CommonModule, FormsModule, RouterLink],
-  templateUrl: './thumb.component.html'
+  templateUrl: './thumb.component.html',
 })
 export class ThumbComponent {
 
-  thumb = input.required<Thumb>();
-  thumb_src = computed(() => this.raspiConfig.media_path()+'/'+this.thumb().name)
+  thumb = input.required<Files>();
+  thumb_src = computed(
+    () => this.signalRaspiconfig.media_path() + '/' + this.thumb().name
+  );
 
   constructor(
-    private thumbService: ThumbsService,
-    private raspiConfig: RaspiconfigService
-  ){}
+    private signalRaspiconfig: SignalsRaspiconfigService,
+    private signalThumbs: SignalsThumbsService,
+    private previews: PreviewsService
+  ) {}
 
-  delete(thumb_id:string){
-    this.thumbService.deleteThumbById(thumb_id).subscribe(
-      () => this.thumbService.removeThumbs(this.thumb())
-    )
-  }
-
-  lock(thumb_id:string){
-    if (this.thumb().locked) {
-      this.thumbService.unlockThumbById(thumb_id).subscribe(
-        () => this.thumb().locked = false
-      )
-    } else {
-      this.thumbService.lockThumbById(thumb_id).subscribe(
-        () => this.thumb().locked = true
-      )
+  delete(thumb_id: string | null | undefined) {
+    if (thumb_id) {
+      this.previews
+        .previewsDeleteThumb(thumb_id)
+        .subscribe(() => this.signalThumbs.removeThumbs(this.thumb()));
     }
   }
 
-  selectedThumb(){
-    this.thumb().selected = true
+  lock(thumb_id: string | null | undefined) {
+    if (thumb_id) {
+      if (this.thumb().locked) {
+        this.previews
+          .previewsPostUnlock(thumb_id)
+          .subscribe(() => (this.thumb().locked = false));
+      } else {
+        this.previews
+          .previewsPostLock(thumb_id)
+          .subscribe(() => (this.thumb().locked = true));
+      }
+    }
   }
 
+  selectedThumb() {
+    this.thumb().selected = true;
+  }
 }

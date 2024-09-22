@@ -1,6 +1,8 @@
 import { AsyncPipe } from '@angular/common';
-import { Component, computed, Signal } from '@angular/core';
-import { SettingsService } from '../../core/services/settings.service';
+import { Component, computed } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { SignalsSettingsService } from '../../core/signals/signals-settings.service';
+import { ButtonsService } from '../../generator';
 import { CameraSettingsComponent } from '../sidemenu/camera-settings/camera-settings.component';
 import { MotionExternalComponent } from '../sidemenu/motion-external/motion-external.component';
 import { MotionInternalComponent } from '../sidemenu/motion-internal/motion-internal.component';
@@ -8,7 +10,6 @@ import { MainButtonsComponent } from './main-buttons/main-buttons.component';
 import { MjpegViewerComponent } from './mjpeg-viewer/mjpeg-viewer.component';
 import { PipanButtonsComponent } from './pipan-buttons/pipan-buttons.component';
 import { UserButtonsComponent } from './user-buttons/user-buttons.component';
-import { toSignal } from '@angular/core/rxjs-interop';
 
 
 @Component({
@@ -22,21 +23,19 @@ import { toSignal } from '@angular/core/rxjs-interop';
     UserButtonsComponent,
     PipanButtonsComponent,
     MjpegViewerComponent,
-    AsyncPipe
+    AsyncPipe,
   ],
   templateUrl: './preview.component.html',
 })
-
 export class PreviewComponent {
-
-  pipan = computed(() => this.settingsService.settings().pipan)
-  display_mode = computed(()=> this.settingsService.display_mode())
-  ubuttons: any
+  pipan = computed(() => this.signalSettings.settings().pipan);
+  display_mode = computed(() => this.signalSettings.display_mode());
+  ubuttons: any;
 
   constructor(
-    private settingsService:SettingsService
-  ){
-    this.ubuttons = toSignal(this.settingsService.getUserButtons())
+    private buttons: ButtonsService,
+    private signalSettings: SignalsSettingsService
+  ) {
+    this.ubuttons = toSignal(this.buttons.buttonsGetButtons());
   }
-
 }

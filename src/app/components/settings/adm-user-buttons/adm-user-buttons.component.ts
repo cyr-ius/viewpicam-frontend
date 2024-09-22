@@ -1,48 +1,42 @@
 import { Component } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
-import { UserButton } from '../../../core/models/app-models';
-import { SettingsService } from '../../../core/services/settings.service';
+import { ButtonPublic, ButtonsService } from '../../../generator';
 
 @Component({
   selector: 'app-adm-user-buttons',
   standalone: true,
   imports: [FormsModule],
-  templateUrl: './adm-user-buttons.component.html'
+  templateUrl: './adm-user-buttons.component.html',
 })
 export class AdmUserButtonsComponent {
-
-
-  userbuttons = <UserButton[]> []
-  button = <UserButton> {display:false}
+  userbuttons = <ButtonPublic[]>[];
+  button = <ButtonPublic>{ display: false };
 
   constructor(
-    private settingsService:SettingsService
-  ){}
-
+    private buttonService: ButtonsService
+  ) {}
 
   ngOnInit(): void {
-    this.listUserButtons()
+    this.listUserButtons();
   }
 
-  delete(id:number){
-    this.settingsService.deleteUserButtons(id).subscribe(()=>{
-      this.listUserButtons()
-    })
+  delete(id: number) {
+    this.buttonService.buttonsDelete(id).subscribe(() => {
+      this.listUserButtons();
+    });
   }
 
-  onSubmit(form:NgForm){
+  onSubmit(form: NgForm) {
     const formData = form.value;
-    this.settingsService.setUserButtons(formData).subscribe(()=> {
+    this.buttonService.buttonsPostButtons(formData).subscribe(() => {
       this.listUserButtons();
       form.resetForm();
-    })
+    });
   }
 
-  listUserButtons(){
-    this.settingsService.getUserButtons().subscribe((rsp)=>{
-      this.userbuttons = rsp
-    })
+  listUserButtons() {
+    this.buttonService.buttonsGetButtons().subscribe((rsp) => {
+      this.userbuttons = rsp;
+    });
   }
-
-
 }

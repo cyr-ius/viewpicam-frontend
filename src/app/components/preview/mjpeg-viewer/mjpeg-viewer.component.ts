@@ -3,10 +3,10 @@ import { HttpClient } from '@angular/common/http';
 import { Component, computed, effect, ElementRef, inject, Inject, Injector, OnInit, viewChild } from '@angular/core';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { map, mergeMap, Subscription, timer } from 'rxjs';
-import { RaspiconfigService } from '../../../core/services/raspiconfig.service';
-import { SettingsService } from '../../../core/services/settings.service';
+import { SignalsRaspiconfigService } from '../../../core/signals/signals-raspiconfig.service';
+import { SignalsSettingsService } from '../../../core/signals/signals-settings.service';
 import { BASE_URL } from '../../../core/tokens/app.token';
-
+import { RaspiconfigService } from '../../../generator';
 
 @Component({
   selector: 'app-mjpeg-viewer',
@@ -16,12 +16,12 @@ import { BASE_URL } from '../../../core/tokens/app.token';
   styleUrl: './mjpeg-viewer.component.css',
 })
 export class MjpegViewerComponent implements OnInit {
-
   BASE_URL = inject(BASE_URL);
 
   constructor(
-    private settingsService: SettingsService,
-    private raspiConfig: RaspiconfigService,
+    private signalSettings: SignalsSettingsService,
+    private signalRaspiconfig: SignalsRaspiconfigService,
+    private raspiService: RaspiconfigService,
     private injector: Injector,
     private http: HttpClient,
     private sanitizer: DomSanitizer,
@@ -30,12 +30,12 @@ export class MjpegViewerComponent implements OnInit {
 
   preview_delay = computed(() =>
     Math.floor(
-      (this.raspiConfig.config().divider /
-        Math.max(this.raspiConfig.config().video_fps, 1)) *
+      (this.signalRaspiconfig.config().divider /
+        Math.max(this.signalRaspiconfig.config().video_fps, 1)) *
         1000
     )
   );
-  pipan_mode = computed(() => this.settingsService.settings().pipan_mode);
+  pipan_mode = computed(() => this.signalSettings.settings().pipan_mode);
 
   mjpeg_src: string | SafeUrl = './img/loading.png';
 
@@ -61,7 +61,7 @@ export class MjpegViewerComponent implements OnInit {
   mjpegModeChange(): void {
     effect(
       () => {
-        if (!this.settingsService.mjpeg_mode()) {
+        if (!this.signalSettings.mjpeg_mode()) {
           this.loadImg();
         } else {
           this.updatePreview(false);
@@ -75,16 +75,18 @@ export class MjpegViewerComponent implements OnInit {
     this.subscription = timer(250)
       .pipe(
         mergeMap(() =>
-          this.raspiConfig.getStatusMjpeg(this.raspiConfig.status_mjpeg())
+          this.raspiService.raspiconfigGetStatus(
+            this.signalRaspiconfig.status_mjpeg(),
+          )
         )
       )
       .subscribe({
-        next: (data) => {
-          this.raspiConfig.setStatus(data.status);
+        next: (data: any) => {
+          this.signalRaspiconfig.setStatus(data.status);
           this.checkStatus();
         },
         error: () => {
-          this.raspiConfig.setStatus('Error');
+          this.signalRaspiconfig.setStatus('Error');
           this.mjpeg_src = './img/unavailable.png';
           this.checkStatus();
         },
@@ -95,25 +97,31 @@ export class MjpegViewerComponent implements OnInit {
     let time = new Date().getTime();
     if (cycle !== undefined && cycle == true) {
       this.mjpeg_src = "./img/updating.png') }}";
-      let url = `${this.BASE_URL}/cam/cam_pic_new?time=${time}&delay=${this.preview_delay()}`;
+      let url = `${
+        this.BASE_URL
+      }/cam/cam_pic_new?time=${time}&delay=${this.preview_delay()}`;
       this.mjpeg_src = url;
     }
-    if (this.previous_halted != this.raspiConfig.halted()) {
-      if (!this.raspiConfig.halted()) {
-        let url = `${this.BASE_URL}/cam/cam_pic_new?time=${time}&delay=${this.preview_delay()}`;
+    if (this.previous_halted != this.signalRaspiconfig.halted()) {
+      if (!this.signalRaspiconfig.halted()) {
+        let url = `${
+          this.BASE_URL
+        }/cam/cam_pic_new?time=${time}&delay=${this.preview_delay()}`;
         this.mjpeg_src = url;
       } else {
         this.mjpeg_src = './img/unavailable.png';
       }
     }
-    this.previous_halted = this.raspiConfig.halted();
+    this.previous_halted = this.signalRaspiconfig.halted();
   }
 
   loadImg() {
     let time = new Date().getTime();
-    if (!this.settingsService.mjpeg_mode()) {
-      if (!this.raspiConfig.halted() && this.preview_delay()) {
-        let url = `${this.BASE_URL}/cam/cam_pic?time=${time}&delay=${this.preview_delay()}`;
+    if (!this.signalSettings.mjpeg_mode()) {
+      if (!this.signalRaspiconfig.halted() && this.preview_delay()) {
+        let url = `${
+          this.BASE_URL
+        }/cam/cam_pic?time=${time}&delay=${this.preview_delay()}`;
         this.mjpeg_src = url;
       } else {
         this.mjpeg_src = './img/unavailable.png';

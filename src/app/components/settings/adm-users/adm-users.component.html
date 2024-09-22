@@ -5,7 +5,7 @@
         <input type="hidden" name="id" value="{{user.id}}">
         <div class="col-auto"><button class="btn btn-sm otp_user" [ngClass]="{'btn-outline-danger': user.otp_confirmed, 'btn-outline-success': !user.otp_confirmed}" type="button" (click)="otpCheckModal(user)"><i class="bi bi-shield-lock"></i></button></div>
         <div class="col-10 col-sm"><input class="form-control form-control-sm" name="name" i18n-placeholder placeholder="Username" type="text" [(ngModel)]="user.name" (change)="onChange(user)" required></div>
-        <div class="col-6 col-sm"><input class="form-control form-control-sm" name="password" i18n-placeholder placeholder="Password" type="password" [(ngModel)]="user.password" (change)="onChange(user)"></div>
+        <div class="col-6 col-sm"><input class="form-control form-control-sm" name="password" i18n-placeholder placeholder="Password" type="password" [(ngModel)]="user.password"  (change)="onChange(user)"></div>
         <div class="col-4 col-sm">
             <select class="form-select form-select-sm" name="right" [(ngModel)]="user.right" (change)="onChange(user)" required>
                 @for (item of userlevel; track $index){

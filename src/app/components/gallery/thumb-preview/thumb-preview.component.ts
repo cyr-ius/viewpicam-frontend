@@ -1,79 +1,91 @@
 import { Component, computed, ElementRef, OnInit, viewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Thumb } from '../../../core/models/app-models';
-import { RaspiconfigService } from '../../../core/services/raspiconfig.service';
-import { ThumbsService } from '../../../core/services/thumbs.service';
+import { SignalsRaspiconfigService } from '../../../core/signals/signals-raspiconfig.service';
+import { SignalsThumbsService } from '../../../core/signals/signals-thumbs.service';
+import { Files, PreviewsService } from '../../../generator';
 import { ThumbsListComponent } from '../thumbs-list.component';
-
 
 @Component({
   selector: 'app-thumb-preview',
   standalone: true,
   imports: [ThumbsListComponent],
-  templateUrl: './thumb-preview.component.html'
+  templateUrl: './thumb-preview.component.html',
 })
 export class ThumbPreviewComponent implements OnInit {
+  display_preview = computed(() => this.signalThumbs.display_preview());
+  prevItem = computed<number>(() =>
+    this.searchIndex(
+      this.signalThumbs.list_thumbs(),
+      this.signalThumbs.current_thumb()?.id,
+      -1
+    )
+  );
+  nextItem = computed<number>(() =>
+    this.searchIndex(
+      this.signalThumbs.list_thumbs(),
+      this.signalThumbs.current_thumb()?.id,
+      1
+    )
+  );
+  count = computed<number>(() => this.signalThumbs.list_thumbs().length);
 
-  display_preview = computed(() => this.thumbsService.display_preview())
-  prevItem = computed<number>(() => this.searchIndex(this.thumbsService.list_thumbs(), this.thumbsService.current_thumb()!.id, -1))
-  nextItem = computed<number>(() => this.searchIndex(this.thumbsService.list_thumbs(), this.thumbsService.current_thumb()!.id, 1))
-  count = computed<number>(() => this.thumbsService.list_thumbs().length)
+  thumb = <Files>{};
 
-  thumb = <Thumb>({})
+  video_detected: boolean = false;
+  img_src: string | undefined = undefined;
+  cam_src: string | undefined = undefined;
+  video = viewChild<ElementRef>('video');
 
-  video_detected: boolean = false
-  img_src: string|undefined = undefined
-  cam_src: string|undefined = undefined
-  video = viewChild<ElementRef>('video')
-
-  keys: string[] = []
+  keys: string[] = [];
 
   constructor(
+    private signalThumbs: SignalsThumbsService,
+    private previews: PreviewsService,
     private activedRtoute: ActivatedRoute,
-    private thumbsService: ThumbsService,
-    private raspiConfig: RaspiconfigService,
+    private signalRaspiconfig: SignalsRaspiconfigService,
     private router: Router
-  ){}
+  ) {}
 
   ngOnInit(): void {
-    this.activedRtoute.paramMap.subscribe((data:any) => {
+    this.activedRtoute.paramMap.subscribe((data: any) => {
       if (data.params.id) {
-        this.thumbsService.getThumbById(data.params.id).subscribe(
-        (rsp) => {
-          this.thumb = rsp;
-          this.display();
-        });
+        this.previews
+          .previewsGetThumb(data.params.id)
+          .subscribe((rsp) => {
+            this.thumb = rsp;
+            this.display();
+          });
       }
-    })
+    });
   }
 
-  ngDestroy(){
-    this.thumbsService.setDisplayPreview(false)
-    this.thumbsService.setCurrentThumb(undefined)
+  ngDestroy() {
+    this.signalThumbs.setDisplayPreview(false);
+    this.signalThumbs.setCurrentThumb(undefined);
   }
 
-  prev(){
-    this.thumb = this.thumbsService.list_thumbs()![this.prevItem()]
-    this.router.navigate(['gallery',this.thumb.id])
-    this.display()
+  prev() {
+    this.thumb = this.signalThumbs.list_thumbs()![this.prevItem()];
+    this.router.navigate(['gallery', this.thumb.id]);
+    this.display();
   }
 
-  next(){
-    this.thumb = this.thumbsService.list_thumbs()![this.nextItem()]
-    this.router.navigate(['gallery',this.thumb.id])
-    this.display()
+  next() {
+    this.thumb = this.signalThumbs.list_thumbs()![this.nextItem()];
+    this.router.navigate(['gallery', this.thumb.id]);
+    this.display();
   }
 
-  display(){
-    this.thumbsService.setDisplayPreview(true);
-    this.thumbsService.setCurrentThumb(this.thumb);
-    this.video_detected = this.thumb?.type == "v".toString() ? true : false
+  display() {
+    this.signalThumbs.setDisplayPreview(true);
+    this.signalThumbs.setCurrentThumb(this.thumb);
+    this.video_detected = this.thumb?.type == 'v'.toString() ? true : false;
 
-    const media_path = this.raspiConfig.media_path()
+    const media_path = this.signalRaspiconfig.media_path();
 
-    if (this.video_detected && this.thumb){
-      if (this.video()){
-        this.video()!.nativeElement.src= `${media_path}/${this.thumb.realname}`;
+    if (this.video_detected && this.thumb) {
+      if (this.video()) {
+        this.video()!.nativeElement.src = `${media_path}/${this.thumb.realname}`;
       } else {
         this.cam_src = `${media_path}/${this.thumb.realname}`;
       }
@@ -82,11 +94,13 @@ export class ThumbPreviewComponent implements OnInit {
     }
   }
 
-  searchIndex(thumbs: Thumb[]|undefined , id:string,  step: number): number{
-    let keys: string[] = []
-    thumbs?.forEach((item)=> keys.push(item.id))
-    let idx = keys.findIndex((element) => element == id)
-    return idx + (1 * step)
+  searchIndex(thumbs: Files[], id: string | null | undefined, step: number): number {
+    if (id == undefined) return 0;
+    let keys: string[] = [];
+    thumbs?.forEach((item) => {
+      if (item.id) keys.push(item.id)
+    });
+    let idx = keys.findIndex((element) => element == id);
+    return idx + 1 * step;
   }
-
 }

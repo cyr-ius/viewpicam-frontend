@@ -1,10 +1,9 @@
 import { Component, computed, effect, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import * as colorconverter from '../../../../../src/scripts/colorconverter.js';
-import { Preset } from '../../../core/models/app-models';
-import { RaspiconfigService } from '../../../core/services/raspiconfig.service';
-import { SettingsService } from '../../../core/services/settings.service';
-
+import { SignalsRaspiconfigService } from '../../../core/signals/signals-raspiconfig.service.js';
+import { SignalsSettingsService } from '../../../core/signals/signals-settings.service.js';
+import { Command, Presets, RaspiconfigService, SystemService } from '../../../generator';
 
 @Component({
   selector: 'app-camera-settings',
@@ -13,10 +12,10 @@ import { SettingsService } from '../../../core/services/settings.service';
   templateUrl: './camera-settings.component.html',
 })
 export class CameraSettingsComponent implements OnInit {
-  raspiconfig = computed(() => this.raspiConfig.config());
-  upreset = computed(() => this.settingsService.settings().upreset);
-  pilight_mode = computed(() => this.settingsService.settings().pilight_mode);
-  presets = <Preset[]>[];
+  raspiconfig = computed(() => this.signalRaspiconfig.config());
+  upreset = computed(() => this.signalSettings.settings().upreset);
+  pilight_mode = computed(() => this.signalSettings.settings().pilight_mode);
+  presets = <Presets[]>[];
   selected_preset: any;
 
   preset: string = '';
@@ -24,32 +23,34 @@ export class CameraSettingsComponent implements OnInit {
   ac_yuv: string | null = null;
 
   constructor(
-    private settingsService: SettingsService,
-    private raspiConfig: RaspiconfigService
+    private signalSettings: SignalsSettingsService,
+    private raspiConfig: RaspiconfigService,
+    private SystemService: SystemService,
+    private signalRaspiconfig: SignalsRaspiconfigService
   ) {
     effect(() => {
-      console.log(this.settingsService.settings().upreset);
+      console.log(this.signalSettings.settings().upreset);
     });
   }
 
   ngOnInit(): void {
-    const upreset = this.settingsService.settings().upreset;
-    this.settingsService
-      .getPresets(upreset)
-      .subscribe((data) => (this.presets = data));
+    const upreset = this.signalSettings.settings().upreset;
+    this.SystemService.systemGetPresets(upreset).subscribe(
+      (data) => (this.selected_preset = data)
+    );
 
     let color_uyv = [
-      this.raspiConfig.config().at_y,
-      this.raspiConfig.config().at_u,
-      this.raspiConfig.config().at_v,
+      this.signalRaspiconfig.config().at_y,
+      this.signalRaspiconfig.config().at_u,
+      this.signalRaspiconfig.config().at_v,
     ];
     this.at_yuv =
       '#' + colorconverter.RGB2HEX(colorconverter.YUV2RGB(color_uyv));
 
     let color_yuv = [
-      this.raspiConfig.config().ac_y,
-      this.raspiConfig.config().ac_u,
-      this.raspiConfig.config().ac_v,
+      this.signalRaspiconfig.config().ac_y,
+      this.signalRaspiconfig.config().ac_u,
+      this.signalRaspiconfig.config().ac_v,
     ];
     this.ac_yuv =
       '#' + colorconverter.RGB2HEX(colorconverter.YUV2RGB(color_yuv));
@@ -61,12 +62,13 @@ export class CameraSettingsComponent implements OnInit {
         this.selected_preset = element;
       }
     });
-    this.raspiConfig.config().video_width = this.selected_preset.width;
-    this.raspiConfig.config().video_height = this.selected_preset.height;
-    this.raspiConfig.config().video_fps = this.selected_preset.fps;
-    this.raspiConfig.config().mp4box_fps = this.selected_preset.i_rate;
-    this.raspiConfig.config().image_width = this.selected_preset.i_width;
-    this.raspiConfig.config().image_height = this.selected_preset.i_height;
+    this.signalRaspiconfig.config().video_width = this.selected_preset.width;
+    this.signalRaspiconfig.config().video_height = this.selected_preset.height;
+    this.signalRaspiconfig.config().video_fps = this.selected_preset.fps;
+    this.signalRaspiconfig.config().mp4box_fps = this.selected_preset.i_rate;
+    this.signalRaspiconfig.config().image_width = this.selected_preset.i_width;
+    this.signalRaspiconfig.config().image_height =
+      this.selected_preset.i_height;
 
     this.sendCmd('px', [
       this.selected_preset.width,
@@ -105,10 +107,13 @@ export class CameraSettingsComponent implements OnInit {
 
   switchLed(r: number, g: number, b: number) {
     // Pipan call library
-    console.log(r,g,b)
+    console.log(r, g, b);
   }
 
   sendCmd(cmd: string, params: any) {
-    this.raspiConfig.sendCmd(cmd, params);
+    const data = <Command>({cmd: cmd, params: [params] });
+    this.raspiConfig.raspiconfigPost(data).subscribe();
   }
 }
+
+

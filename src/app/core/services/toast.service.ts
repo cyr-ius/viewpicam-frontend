@@ -1,5 +1,17 @@
 import { Injectable, signal } from '@angular/core';
-import { ToastMessage } from '../models/app-models';
+
+
+export const enum TypeMessage {
+  info = 'INFO',
+  warning = 'WARNING',
+  error = 'ERROR',
+}
+
+export interface ToastMessage {
+  type: TypeMessage;
+  message: string;
+}
+
 
 @Injectable({
   providedIn: 'root'

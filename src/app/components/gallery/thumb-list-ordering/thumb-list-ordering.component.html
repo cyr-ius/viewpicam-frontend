@@ -1,14 +1,14 @@
 <div id="filtering" class="row row-cols-sm-auto mt-1 g-1">
   <label class="col-2 col-md-1 col-form-label-sm" i18n>Ordering</label>
   <div class="col-10 col-md">
-      <select class="form-select form-select-sm" name="sort_order" [(ngModel)]="thumbsService.sort_order">
+      <select class="form-select form-select-sm" name="sort_order" [(ngModel)]="signalThumbs.sort_order">
           <option value="asc" i18n>Ascending</option>
           <option value="desc" i18n>Descending</option>
       </select>
   </div>
   <label class="col-2 col-md-1 col-form-label-sm" i18n>Types</label>
   <div class="col-10 col-md">
-      <select class="form-select form-select-sm" name="show_types" [(ngModel)]="thumbsService.show_types">
+      <select class="form-select form-select-sm" name="show_types" [(ngModel)]="signalThumbs.show_types">
           <option value="both" i18n>Images & Videos</option>
           <option value="image" i18n>Images only</option>
           <option value="video" i18n>Videos only</option>
@@ -16,7 +16,7 @@
   </div>
   <label class="col-2 col-md-1 col-form-label-sm" i18n>Filter</label>
   <div class="col-10 col-md">
-      <select class="form-select form-select-sm" name="time_filter" [(ngModel)]="thumbsService.time_filter">
+      <select class="form-select form-select-sm" name="time_filter" [(ngModel)]="signalThumbs.time_filter">
           <option value="1" i18n>All</option>
           @for (i of [2,4,6,8]; track i){
           <option value="{{i}}">{{(i-2) * 24}} - {{(i-1) * 24}} hours old</option>
@@ -26,7 +26,7 @@
   </div>
   <label class="col-2 col-md-1 form-check-label">AutoRefresh</label>
   <div class="form-check form-switch">
-    <input class="form-check-input" type="checkbox" name="autorefresh" [(ngModel)]="thumbsService.autorefresh">
+    <input class="form-check-input" type="checkbox" name="autorefresh" [(ngModel)]="signalThumbs.autorefresh">
   </div>
   <div class="col-auto ms-auto" [hidden]="!display_preview()">
     <button id="hide-preview" class="btn" style="border-style: none;" (click)="hiddenPreview()"><i class="bi bi-arrow-bar-up"></i></button>

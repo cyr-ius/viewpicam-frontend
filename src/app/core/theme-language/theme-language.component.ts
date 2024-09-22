@@ -1,35 +1,33 @@
 import { Component, OnInit } from '@angular/core';
-import { LocalesService } from '../../core/services/locales.service';
+import { Locale, SystemService, UsersService } from '../../generator';
 
 @Component({
   selector: 'app-theme-language',
   standalone: true,
   imports: [],
   templateUrl: './theme-language.component.html',
-  styleUrl: './theme-language.component.css'
+  styleUrl: './theme-language.component.css',
 })
 export class ThemeLanguageComponent implements OnInit {
+  locales: Locale[] = [];
+  locale: string | undefined = 'EN';
+  userid: number | undefined;
 
-  locales: string[] = [];
-  locale: string|undefined;
-  userid: number|undefined;
+  constructor(private system: SystemService, private users: UsersService) {}
 
-  constructor(
-    private Locales: LocalesService
-  ){}
-
-  ngOnInit(){
-    this.Locales.getLocales().subscribe(
-      response => {
-       this.locales = response.locales
-      }
-    );
+  ngOnInit() {
+    this.system.systemGetLocales().subscribe((response) => {
+      this.locales = response;
+    });
 
     if (this.userid) {
-      this.Locales.getLocaleById(1).subscribe((response) => this.locale = response);
+      this.users
+        .usersGetUser(this.userid)
+        .subscribe((response) => (this.locale = response.locale));
     }
   }
 
-  onSelected(locale:string):void {}
-
+  onSelected(locale: Locale) {
+    console.debug(locale);
+  }
 }

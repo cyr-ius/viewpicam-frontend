@@ -12,8 +12,8 @@
                 <button class="btn btn-sm btn-outline-secondary get" i18n-title title="Generate" i18n (click)="setToken()">Generate</button>
                 <button class="btn btn-sm btn-outline-secondary delete" i18n-title title="Reset" i18n (click)="deleteToken()">Reset</button>
             </div>
-            <a id="cam_pic_new" href="/api/v1/cam/cam_pic_new?cam_token={{camtoken!.cam_token}}" target="_blank" i18n>Stream view</a>
-            <a id="cam_pic" href="/api/v1/cam/cam_pic?cam_token={{camtoken!.cam_token}}" target="_blank" i18n>Last Picture</a>
+            <a id="cam_pic_new" href="/api/v1/cam/cam_pic_new?cam_token={{camtoken.cam_token}}" target="_blank" i18n>Stream view</a>
+            <a id="cam_pic" href="/api/v1/cam/cam_pic?cam_token={{camtoken.cam_token}}" target="_blank" i18n>Last Picture</a>
         </div>
     </div>
 </div>

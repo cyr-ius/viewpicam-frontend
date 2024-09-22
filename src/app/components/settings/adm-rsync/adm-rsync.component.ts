@@ -1,38 +1,35 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
-import { Rsync } from '../../../core/models/app-models';
-import { SettingsService } from '../../../core/services/settings.service';
+import { Rsync, RsyncService } from '../../../generator';
 
 @Component({
   selector: 'app-adm-rsync',
   standalone: true,
   imports: [FormsModule, CommonModule],
-  templateUrl: './adm-rsync.component.html'
+  templateUrl: './adm-rsync.component.html',
 })
 export class AdmRSyncComponent implements OnInit {
-
-
- rsync = <Rsync> {rs_enabled:false}
+  rsync = <Rsync>{ rs_enabled: false };
 
   constructor(
-    private settingsService: SettingsService
-  ){}
+    private rsyncService: RsyncService
+  ) {}
 
   ngOnInit(): void {
-    this.settingsService.getRsync().subscribe((rsp)=>{
-      this.rsync = rsp
-    })
+    this.rsyncService.rsyncGet().subscribe((rsp) => {
+      this.rsync = rsp;
+    });
   }
 
-  onSubmit(form: NgForm){
+  onSubmit(form: NgForm) {
     const formData = form.value;
-    this.settingsService.setRsync(formData).subscribe()
+    this.rsyncService.rsyncPost(formData).subscribe();
   }
 
-  onReset(form: NgForm){
-    this.settingsService.deleteRsync().subscribe(()=>{
-      form.resetForm()
-    })
+  onReset(form: NgForm) {
+    this.rsyncService.rsyncDelete().subscribe(() => {
+      form.resetForm();
+    });
   }
 }

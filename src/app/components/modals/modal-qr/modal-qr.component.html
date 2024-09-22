@@ -18,7 +18,7 @@
                   <p>Please scan QR Code and input code to first onboarding.</p>
                 }
                 @if (!user.otp_confirmed){
-                <div id="otp_svg" class="col-6 mx-auto bg-light my-3" [innerHtml]="user.otp_svg | safeHtml"></div>
+                <div id="otp_svg" class="col-6 mx-auto bg-light my-3" [innerHtml]="otp_svg | safeHtml"></div>
                 <div id="otp_secret" class="col-6 mx-auto">
                   <div class="input-group mb-3">
                       <span class="input-group-text"><i class="bi bi-shield-lock"></i></span>

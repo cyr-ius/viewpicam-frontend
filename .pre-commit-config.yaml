@@ -29,7 +29,8 @@ repos:
             angular.json|
             tsconfig.*|
             package-lock.json|
-            package.json
+            package.json |
+            openapitools.json
           )$
       - id: pretty-format-json
         args:
@@ -41,7 +42,8 @@ repos:
             angular.json|
             tsconfig.*|
             package-lock.json|
-            package.json
+            package.json |
+            openapitools.json
           )$
       - id: check-yaml
         exclude: (.vscode|.devcontainer|.github)

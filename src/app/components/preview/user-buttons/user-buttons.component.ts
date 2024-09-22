@@ -1,24 +1,21 @@
 import { AsyncPipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
-import { UserButton } from '../../../core/models/app-models';
-import { SettingsService } from '../../../core/services/settings.service';
+import { ButtonPublic, ButtonsService } from '../../../generator';
+
 
 @Component({
   selector: 'app-user-buttons',
   standalone: true,
   imports: [AsyncPipe],
-  templateUrl: './user-buttons.component.html'
+  templateUrl: './user-buttons.component.html',
 })
-export class UserButtonsComponent implements OnInit{
+export class UserButtonsComponent implements OnInit {
+  ubuttons!: Observable<ButtonPublic[]>;
 
-  ubuttons!: Observable<UserButton[]>
-
-  constructor(
-    private settingsService: SettingsService
-  ){}
+  constructor(private buttons: ButtonsService) {}
 
   ngOnInit(): void {
-    this.ubuttons = this.settingsService.getUserButtons()
+    this.ubuttons = this.buttons.buttonsGetButtons();
   }
 }

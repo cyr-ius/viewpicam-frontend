@@ -1,8 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { of } from 'rxjs';
-import { ToastMessage } from '../models/app-models';
-import { ToastService } from './toast.service';
+import { ToastMessage, ToastService } from './toast.service';
 
 @Injectable({
   providedIn: 'root'
@@ -19,10 +18,12 @@ export class CommonService {
     return of(errorValue);
   }
 
-  copyToClipboard(value:string){
-    navigator.clipboard.writeText(value).then(
-        function(){ alert("yeah!");  }) // success
-      .catch(function() { alert("err"); }); // error
+  copyToClipboard(value:string|null|undefined){
+    if (value) {
+      navigator.clipboard.writeText(value).then(
+          function(){ alert("yeah!");  }) // success
+        .catch(function() { alert("err"); }); // error
+    }
   }
 
   subscribeError(error: HttpErrorResponse) {

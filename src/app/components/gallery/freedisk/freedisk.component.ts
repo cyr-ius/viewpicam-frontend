@@ -1,24 +1,20 @@
 import { Component, OnInit } from '@angular/core';
-import { FreeDisk } from '../../../core/models/app-models';
-import { SettingsService } from '../../../core/services/settings.service';
+import { FreeDisk, SystemService } from '../../../generator';
 
 @Component({
   selector: 'app-freedisk',
   standalone: true,
   imports: [],
-  templateUrl: './freedisk.component.html'
+  templateUrl: './freedisk.component.html',
 })
-export class FreediskComponent implements OnInit{
+export class FreediskComponent implements OnInit {
+  disk_usage!: FreeDisk;
 
-  disk_usage!: FreeDisk
-
-  constructor(
-    private settingsService: SettingsService
-  ){}
+  constructor(private system: SystemService) {}
 
   ngOnInit(): void {
-    this.settingsService.getFreedisk().subscribe(
-      (data) => this.disk_usage = data
-    )
+    this.system
+      .systemGetFreedisks()
+      .subscribe((data) => (this.disk_usage = data));
   }
 }

@@ -1,28 +1,27 @@
 import { CommonModule } from '@angular/common';
 import { Component, computed, OnInit } from '@angular/core';
-import { Log } from '../../core/models/app-models';
-import { SettingsService } from '../../core/services/settings.service';
 import { GlobalSpinnerService } from '../../core/services/global-spinner.service';
+import { Log, LogsService } from '../../generator';
 
 @Component({
   selector: 'app-log',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './log.component.html'
+  templateUrl: './log.component.html',
 })
 export class LogComponent implements OnInit {
-
-  logs = <Log[]> []
-  spinner = computed(() => this.globalSpinner.spinner())
+  logs = <Log[]>[];
+  spinner = computed(() => this.globalSpinner.spinner());
 
   constructor(
-    private settingsService: SettingsService,
-    private globalSpinner: GlobalSpinnerService
-  ){}
+    private globalSpinner: GlobalSpinnerService,
+    private LogsService: LogsService
+  ) {}
 
   ngOnInit(): void {
-    this.globalSpinner.on()
-    this.settingsService.getLog(true).subscribe(rsp => this.logs = rsp)
+    this.globalSpinner.on();
+    this.LogsService.logsGet(true).subscribe(
+      (rsp) => (this.logs = rsp)
+    );
   }
-
 }
