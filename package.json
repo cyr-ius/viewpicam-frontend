@@ -34,7 +34,7 @@
     "@angular/cli": "^18.2.4",
     "@angular/compiler-cli": "^18.1.0",
     "@angular/localize": "^18.2.4",
-    "@hey-api/openapi-ts": "^0.53.2",
+    "@hey-api/openapi-ts": "^0.53.3",
     "@openapitools/openapi-generator-cli": "^2.13.9",
     "@types/bootstrap": "^5.2.10",
     "@types/event-source-polyfill": "^1.0.5",
