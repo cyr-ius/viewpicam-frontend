@@ -19,7 +19,7 @@
     "@angular/platform-browser": "^18.1.0",
     "@angular/platform-browser-dynamic": "^18.1.0",
     "@angular/router": "^18.2.4",
-    "@hey-api/client-fetch": "^0.3.1",
+    "@hey-api/client-fetch": "^0.3.2",
     "@popperjs/core": "^2.11.8",
     "bootstrap": "^5.3.3",
     "bootstrap-icons": "^1.11.3",
