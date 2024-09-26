@@ -2,8 +2,8 @@ import { DOCUMENT, NgOptimizedImage } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Component, computed, effect, ElementRef, inject, Inject, Injector, OnInit, viewChild } from '@angular/core';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
-import { map, mergeMap, Subscription, timer } from 'rxjs';
-import { RaspiconfigService } from '../../../client';
+import { map, timer } from 'rxjs';
+import { webSocket, WebSocketSubject } from 'rxjs/webSocket';
 import { SignalsRaspiconfigService } from '../../../core/signals/signals-raspiconfig.service';
 import { SignalsSettingsService } from '../../../core/signals/signals-settings.service';
 import { BASE_URL } from '../../../core/tokens/app.token';
@@ -21,7 +21,6 @@ export class MjpegViewerComponent implements OnInit {
   constructor(
     private signalSettings: SignalsSettingsService,
     private signalRaspiconfig: SignalsRaspiconfigService,
-    private raspiService: RaspiconfigService,
     private injector: Injector,
     private http: HttpClient,
     private sanitizer: DomSanitizer,
@@ -46,16 +45,29 @@ export class MjpegViewerComponent implements OnInit {
   last: string = '';
 
   mjpeg_img = viewChild.required<ElementRef>('mjpeg_img');
-  subscription!: Subscription;
+  socket!: WebSocketSubject<undefined>
 
   ngOnInit(): void {
     this.hashHandler();
     this.mjpegModeChange();
-    this.checkStatus();
+
+    const ws_scheme = window.location.protocol == 'https:' ? 'wss' : 'ws';
+    this.socket = webSocket(`${ws_scheme}://${window.location.host}/api/v1/ws/status`);
+    this.socket.subscribe({
+      next: (message:any) => {
+        console.log(message);
+        this.signalRaspiconfig.setStatus(message);
+      },
+      error: () => {
+        this.signalRaspiconfig.setStatus('Error');
+        this.mjpeg_src = './img/unavailable.png';
+      }
+
+    })
   }
 
   ngOnDestroy(): void {
-    this.subscription.unsubscribe();
+    this.socket.unsubscribe()
   }
 
   mjpegModeChange(): void {
@@ -69,28 +81,6 @@ export class MjpegViewerComponent implements OnInit {
       },
       { injector: this.injector }
     );
-  }
-
-  checkStatus() {
-    this.subscription = timer(250)
-      .pipe(
-        mergeMap(() =>
-          this.raspiService.raspiconfigGetStatus(
-            this.signalRaspiconfig.status_mjpeg(),
-          )
-        )
-      )
-      .subscribe({
-        next: (data: any) => {
-          this.signalRaspiconfig.setStatus(data.status);
-          this.checkStatus();
-        },
-        error: () => {
-          this.signalRaspiconfig.setStatus('Error');
-          this.mjpeg_src = './img/unavailable.png';
-          this.checkStatus();
-        },
-      });
   }
 
   updatePreview(cycle: boolean) {
