@@ -13,7 +13,6 @@ export const authGuard: CanActivateFn = (_route, _state) => {
   if (signalAuth.current_user()) {
     const now = new Date().getTime();
     if (now > signalAuth.expires_in()) {
-      console.warn('[Auth Guard] JWT Token expired');
       signalAuth.setMessage('JWToken expired');
       signalAuth.setCurrentUser(null);
       router.navigate(['/login']);
@@ -33,7 +32,6 @@ export const authGuard: CanActivateFn = (_route, _state) => {
         obs.next(true);
       },
       error: (_error) => {
-        console.warn('[Auth Guard] User infos error');
         signalAuth.setCurrentUser(null);
         router.navigate(['/login']);
         obs.next(false);
