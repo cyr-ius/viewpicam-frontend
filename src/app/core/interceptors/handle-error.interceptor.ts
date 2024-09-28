@@ -7,7 +7,12 @@ export const handleErrorInterceptor: HttpInterceptorFn = (req, next) => {
 
   const common = inject(CommonService);
 
-  return next(req).pipe(
-    catchError((error) => common.handleErrorDetail(error.error.detail, []))
-  );
+  let sendApi = req.url.match('/api')?.length && req.method != "GET" && !req.url.match('idp')?.length
+
+  if (sendApi) {
+    return next(req).pipe(
+      catchError((error) => common.handleErrorDetail(error.error.detail, []))
+    );
+  }
+  return next(req)
 };
