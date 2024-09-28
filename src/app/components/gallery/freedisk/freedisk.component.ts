@@ -9,12 +9,17 @@ import { FreeDisk, SystemService } from '../../../client';
 })
 export class FreediskComponent implements OnInit {
   disk_usage!: FreeDisk;
+  style = "";
 
   constructor(private system: SystemService) {}
 
   ngOnInit(): void {
     this.system
       .systemGetFreedisks()
-      .subscribe((data) => (this.disk_usage = data));
+      .subscribe((data) => {
+        this.disk_usage = data
+        this.style=`background-color:${data.color};width:${data.prc}%;`
+
+      });
   }
 }
