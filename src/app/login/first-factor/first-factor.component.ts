@@ -41,7 +41,7 @@ export class FirstFactorComponent implements OnInit {
 
   ngOnInit(): void {
     this.idp
-      .idpCheckFirstRun()
+      .idpCheckFirstRun('response')
       .pipe(
         retry({
           delay: () => {
@@ -114,4 +114,3 @@ export class FirstFactorComponent implements OnInit {
     );
   }
 }
-
