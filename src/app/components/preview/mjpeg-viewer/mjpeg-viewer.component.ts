@@ -55,7 +55,6 @@ export class MjpegViewerComponent implements OnInit {
     this.socket = webSocket(`${ws_scheme}://${window.location.host}/api/v1/ws/status`);
     this.socket.subscribe({
       next: (message:any) => {
-        console.log(message);
         this.signalRaspiconfig.setStatus(message);
       },
       error: () => {
