@@ -1,4 +1,4 @@
-import { Component, computed, effect, OnInit } from '@angular/core';
+import { Component, computed, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import * as colorconverter from '../../../../../src/scripts/colorconverter.js';
 import { Command, Presets, RaspiconfigService, SystemService } from '../../../client/index.js';
@@ -27,11 +27,7 @@ export class CameraSettingsComponent implements OnInit {
     private raspiConfig: RaspiconfigService,
     private SystemService: SystemService,
     private signalRaspiconfig: SignalsRaspiconfigService
-  ) {
-    effect(() => {
-      console.log(this.signalSettings.settings().upreset);
-    });
-  }
+  ) {}
 
   ngOnInit(): void {
     const upreset = this.signalSettings.settings().upreset;
@@ -115,5 +111,3 @@ export class CameraSettingsComponent implements OnInit {
     this.raspiConfig.raspiconfigPost(data).subscribe();
   }
 }
-
-
