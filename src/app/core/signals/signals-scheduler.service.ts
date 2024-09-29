@@ -27,8 +27,10 @@ export class SignalsSchedulerService {
     purgespace_modeex: 0,
   });
   scheduler_settings = this.schedulerSettings.asReadonly();
-  private Period = signal<string>('');
-  period = this.Period.asReadonly();
+
+  private currentPeriod = signal<string>('');
+  current_period = this.currentPeriod.asReadonly();
+
   private dayMode = signal<number>(-1);
   daymode = this.dayMode.asReadonly();
   private schedulerState = signal<boolean>(false);
@@ -39,7 +41,7 @@ export class SignalsSchedulerService {
   setDaymode(mode: number) {
     this.dayMode.set(mode);
     this.schedule.scheduleGetPeriod(mode).subscribe((rsp) => {
-      this.Period.set(rsp.period);
+      this.currentPeriod.set(rsp.period);
     });
   }
 

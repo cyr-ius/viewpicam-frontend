@@ -15,6 +15,7 @@ import { SignalsSchedulerService } from '../../../core/signals/signals-scheduler
 export class ScheduleFormComponent implements OnInit {
   scheduler_day = computed(() => this.signalScheduler.scheduler_day());
   daymode = computed(() => this.signalScheduler.daymode());
+  current_period = computed(() => this.signalScheduler.current_period())
 
   constructor(
     private schedule: ScheduleService,
@@ -24,7 +25,9 @@ export class ScheduleFormComponent implements OnInit {
   ngOnInit(): void {
     this.schedule
       .scheduleGetSchedulers()
-      .pipe(tap((data) => this.signalScheduler.setSchedulerDay(data)))
+      .pipe(
+        tap((data) => this.signalScheduler.setSchedulerDay(data))
+      )
       .subscribe();
   }
 }

@@ -13,7 +13,7 @@
     @for (item of scheduler; track item.id) {
       @if (item.daysmode.id == daymode()){
       <div class="row row-cols-2 row-cols-md g-1">
-          <div class="col-2 col-md">{{item.period}}</div>
+          <div class="col-2 col-md" [style.background-color]="(item.period==current_period()) ? 'var(--bs-success)' : ''">{{item.period |titlecase }}</div>
           <div class="col-6 col-md text-center">
                 <input class="form-checkbox form-checkbox-sm" type="checkbox" name="scheduler[{{item.id}}]['calendar']['Mon']" [(ngModel)]="item.calendars.Mon">
                 <input class="form-checkbox form-checkbox-sm" type="checkbox" name="scheduler[{{item.id}}]['calendar']['Tue']" [(ngModel)]="item.calendars.Tue">

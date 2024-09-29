@@ -11,7 +11,7 @@ import { SignalsSchedulerService } from '../../../core/signals/signals-scheduler
   templateUrl: './current-state.component.html',
 })
 export class CurrentStateComponent implements OnInit {
-  period = computed(() => this.signalScheduler.period());
+  current_period = computed(() => this.signalScheduler.current_period());
 
   constructor(
     private TasksService: TasksService,
@@ -26,9 +26,6 @@ export class CurrentStateComponent implements OnInit {
   subscription!: Subscription;
 
   ngOnInit(): void {
-    this.subscription = interval(1000).subscribe(
-      () => (this.current_time = new Date())
-    );
     this.schedule
       .scheduleGetSunrise()
       .subscribe((rsp) => (this.sunrise = rsp.day_time));
@@ -38,10 +35,21 @@ export class CurrentStateComponent implements OnInit {
     this.schedule
       .scheduleGetGmtoffset()
       .subscribe((rsp) => (this.offset = rsp.gmt_offset));
-    this.TasksService.tasksStatus().subscribe();
+
+    this.TasksService.tasksStatus().subscribe(
+      (data) => this.signalScheduler.setState(data.state)
+    );
+    this.subscription = this.TimeClock()
   }
 
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
   }
+
+  TimeClock(): Subscription {
+    return interval(1000).subscribe(
+      () => (this.current_time = new Date())
+    );
+  }
+
 }
