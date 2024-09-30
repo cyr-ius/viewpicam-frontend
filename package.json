@@ -37,7 +37,7 @@
     "@types/bootstrap": "^5.2.10",
     "@types/event-source-polyfill": "^1.0.5",
     "@types/jasmine": "~5.1.0",
-    "@types/lodash": "^4.17.7",
+    "@types/lodash": "^4.17.9",
     "jasmine-core": "~5.3.0",
     "karma": "~6.4.0",
     "karma-chrome-launcher": "~3.2.0",
