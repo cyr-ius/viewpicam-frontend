@@ -32,7 +32,7 @@ export class CameraSettingsComponent implements OnInit {
   ngOnInit(): void {
     const upreset = this.signalSettings.settings().upreset;
     this.SystemService.systemGetPresets(upreset).subscribe(
-      (data) => (this.selected_preset = data)
+      (data) => (this.presets = data)
     );
 
     let color_uyv = [
@@ -107,7 +107,9 @@ export class CameraSettingsComponent implements OnInit {
   }
 
   sendCmd(cmd: string, params: any) {
-    const data = <Command>({cmd: cmd, params: [params] });
+    if ( ! Array.isArray(params))
+      params = [params]
+    const data = <Command>({cmd: cmd, params: params });
     this.raspiConfig.raspiconfigPost(data).subscribe();
   }
 }

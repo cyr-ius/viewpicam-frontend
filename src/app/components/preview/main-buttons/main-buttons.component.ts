@@ -487,7 +487,9 @@ export class MainButtonsComponent {
   }
 
   sendCmd(cmd: any, params: any) {
-    const data = <Command>{ cmd: cmd, params: [params] };
+    if ( ! Array.isArray(params))
+      params = [params]
+    const data = <Command>{ cmd: cmd, params: params };
     this.raspiConfig.raspiconfigPost(data).subscribe();
   }
 }
