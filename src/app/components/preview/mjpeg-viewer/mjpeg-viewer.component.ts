@@ -18,15 +18,6 @@ import { BASE_URL } from '../../../core/tokens/app.token';
 export class MjpegViewerComponent implements OnInit {
   BASE_URL = inject(BASE_URL);
 
-  constructor(
-    private signalSettings: SignalsSettingsService,
-    private signalRaspiconfig: SignalsRaspiconfigService,
-    private injector: Injector,
-    private http: HttpClient,
-    private sanitizer: DomSanitizer,
-    @Inject(DOCUMENT) private document: any
-  ) {}
-
   preview_delay = computed(() =>
     Math.floor(
       (this.signalRaspiconfig.config().divider /
@@ -37,22 +28,29 @@ export class MjpegViewerComponent implements OnInit {
   pipan_mode = computed(() => this.signalSettings.settings().pipan_mode);
 
   mjpeg_src: string | SafeUrl = './img/loading.png';
-
   elem: any;
   fullscreen: boolean = false;
   cycle: boolean | undefined = undefined;
   previous_halted: boolean | undefined = undefined;
   last: string = '';
-
   mjpeg_img = viewChild.required<ElementRef>('mjpeg_img');
   socket!: WebSocketSubject<undefined>
+
+  constructor(
+    private signalSettings: SignalsSettingsService,
+    private signalRaspiconfig: SignalsRaspiconfigService,
+    private injector: Injector,
+    private http: HttpClient,
+    private sanitizer: DomSanitizer,
+    @Inject(DOCUMENT) private document: any
+  ) {}
 
   ngOnInit(): void {
     this.hashHandler();
     this.mjpegModeChange();
 
     const ws_scheme = window.location.protocol == 'https:' ? 'wss' : 'ws';
-    this.socket = webSocket(`${ws_scheme}://${window.location.host}/api/v1/ws/status`);
+    this.socket = webSocket(`${ws_scheme}://${window.location.host}${this.BASE_URL}/ws/status`);
     this.socket.subscribe({
       next: (message:any) => {
         this.signalRaspiconfig.setStatus(message);

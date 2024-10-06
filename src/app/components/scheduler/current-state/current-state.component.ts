@@ -12,18 +12,17 @@ import { SignalsSchedulerService } from '../../../core/signals/signals-scheduler
 })
 export class CurrentStateComponent implements OnInit {
   current_period = computed(() => this.signalScheduler.current_period());
+  offset: string = '';
+  sunrise: string = '';
+  sunset: string = '';
+  current_time = new Date();
+  subscription!: Subscription;
 
   constructor(
     private TasksService: TasksService,
     private schedule: ScheduleService,
     private signalScheduler: SignalsSchedulerService
   ) {}
-
-  offset: string = '';
-  sunrise: string = '';
-  sunset: string = '';
-  current_time = new Date();
-  subscription!: Subscription;
 
   ngOnInit(): void {
     this.schedule
