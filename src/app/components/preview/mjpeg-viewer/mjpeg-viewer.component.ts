@@ -82,18 +82,15 @@ export class MjpegViewerComponent implements OnInit {
 
   updatePreview(cycle: boolean) {
     let time = new Date().getTime();
+    let delay = this.preview_delay();
     if (cycle !== undefined && cycle == true) {
       this.mjpeg_src = "./img/updating.png') }}";
-      let url = `${
-        this.BASE_URL
-      }/cam/cam_pic_new?time=${time}&delay=${this.preview_delay()}`;
+      let url = `${this.BASE_URL}/cam/cam_pic_new?time=${time}&delay=${delay}`;
       this.mjpeg_src = url;
     }
     if (this.previous_halted != this.signalRaspiconfig.halted()) {
       if (!this.signalRaspiconfig.halted()) {
-        let url = `${
-          this.BASE_URL
-        }/cam/cam_pic_new?time=${time}&delay=${this.preview_delay()}`;
+        let url = `${this.BASE_URL}/cam/cam_pic_new?time=${time}&delay=${delay}`;
         this.mjpeg_src = url;
       } else {
         this.mjpeg_src = './img/unavailable.png';
@@ -104,11 +101,10 @@ export class MjpegViewerComponent implements OnInit {
 
   loadImg() {
     let time = new Date().getTime();
+    let delay = isNaN(this.preview_delay()) ? 40 : this.preview_delay();
     if (!this.signalSettings.mjpeg_mode()) {
-      if (!this.signalRaspiconfig.halted() && this.preview_delay()) {
-        let url = `${
-          this.BASE_URL
-        }/cam/cam_pic?time=${time}&delay=${this.preview_delay()}`;
+      if (!this.signalRaspiconfig.halted() && delay) {
+        let url = `${this.BASE_URL}/cam/cam_pic?time=${time}&delay=${delay}`;
         this.mjpeg_src = url;
       } else {
         this.mjpeg_src = './img/unavailable.png';
