@@ -11,7 +11,7 @@ COPY . .
 RUN npm run build --prod
 
 # ------------- MAIN ---------------
-FROM nginx:latest AS ngi
+FROM nginx:alpine3.20-slim AS ngi
 
 WORKDIR /usr/share/nginx
 
