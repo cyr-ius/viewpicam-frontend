@@ -82,7 +82,7 @@ export class MjpegViewerComponent implements OnInit {
 
   updatePreview(cycle: boolean) {
     let time = new Date().getTime();
-    let delay = this.preview_delay();
+    let delay = isNaN(this.preview_delay()) ? 40 : this.preview_delay();
     if (cycle !== undefined && cycle == true) {
       this.mjpeg_src = "./img/updating.png') }}";
       let url = `${this.BASE_URL}/cam/cam_pic_new?time=${time}&delay=${delay}`;
