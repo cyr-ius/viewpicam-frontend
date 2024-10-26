@@ -32,14 +32,10 @@ export class CurrentStateComponent implements OnInit {
         this.schedule
           .scheduleGetSunset()
           .subscribe((rsp) => (this.sunset = rsp.day_time));
-
-        this.schedule.scheduleGetTime().subscribe(
-          (data) => {
-            this.current_time = new Date(+data);
-        })
-
+        this.schedule
+          .scheduleGetTime()
+          .subscribe((rsp) => (this.current_time = new Date(+rsp)));
       }
-
     })
   }
 
