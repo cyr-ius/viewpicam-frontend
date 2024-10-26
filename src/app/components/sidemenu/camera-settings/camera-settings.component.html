@@ -160,13 +160,18 @@
                 <input [(ngModel)]="raspiconfig().anno3_custom_background_V" id="ac_v" type="hidden" name="ac_v">
             </div>
         </div>
-        @if (pilight_mode()) {
+        @if (pilight) {
         <div class="row g-3">
             <label class="col col-form-label">Pi-Light:</label>
             <div class="col">
-                R: <input [(ngModel)]="raspiconfig().pilight_r" type="number" size="4" name="pilight_r" value="255" min="0" max="255" step="1" (change)="switchLed(+raspiconfig().pilight_r,+raspiconfig().pilight_g,+raspiconfig().pilight_b)">
-                G: <input [(ngModel)]="raspiconfig().pilight_g" type="number" size="4" name="pilight_g" value="255" min="0" max="255" step="1" (change)="switchLed(+raspiconfig().pilight_r,+raspiconfig().pilight_g,+raspiconfig().pilight_b)">
-                B: <input [(ngModel)]="raspiconfig().pilight_b" type="number" size="4" name="pilight_b" value="255" min="0" max="255" step="1" (change)="switchLed(+raspiconfig().pilight_r,+raspiconfig().pilight_g,+raspiconfig().pilight_b)">
+                <div class="input-group input-group-sm">
+                    <span class="input-group-text">R</span>
+                    <input class="form-control form-control-sm" [(ngModel)]="raspiconfig().pilight_r" type="number" name="pilight_r" min="1" max="255" step="1" (change)="switchLed(+raspiconfig().pilight_r,+raspiconfig().pilight_g,+raspiconfig().pilight_b)">
+                    <span class="input-group-text">G</span>
+                    <input class="form-control form-control-sm" [(ngModel)]="raspiconfig().pilight_g" type="number" name="pilight_g" min="1" max="255" step="1" (change)="switchLed(+raspiconfig().pilight_r,+raspiconfig().pilight_g,+raspiconfig().pilight_b)">
+                    <span class="input-group-text">B</span>
+                    <input class="form-control form-control-sm" [(ngModel)]="raspiconfig().pilight_b" type="number" name="pilight_b" min="1" max="255" step="1" (change)="switchLed(+raspiconfig().pilight_r,+raspiconfig().pilight_g,+raspiconfig().pilight_b)">
+                </div>
             </div>
         </div>
         }

@@ -1,9 +1,8 @@
 import { Component, computed, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import * as colorconverter from '../../../../../src/scripts/colorconverter.js';
-import { Command, Presets, RaspiconfigService, SystemService } from '../../../client/index.js';
+import { Command, Presets, RaspiconfigService, SettingsService, SystemService } from '../../../client/index.js';
 import { SignalsRaspiconfigService } from '../../../core/signals/signals-raspiconfig.service.js';
-import { SignalsSettingsService } from '../../../core/signals/signals-settings.service.js';
 
 @Component({
   selector: 'app-camera-settings',
@@ -13,27 +12,27 @@ import { SignalsSettingsService } from '../../../core/signals/signals-settings.s
 })
 export class CameraSettingsComponent implements OnInit {
   raspiconfig = computed(() => this.signalRaspiconfig.config());
-  upreset = computed(() => this.signalSettings.settings().upreset);
-  pilight_mode = computed(() => this.signalSettings.settings().pilight_mode);
   presets = <Presets[]>[];
-  selected_preset: any;
 
+  pilight: boolean = false;
   preset: string = '';
   at_yuv: string | null = null;
   ac_yuv: string | null = null;
 
   constructor(
-    private signalSettings: SignalsSettingsService,
+    private settings: SettingsService,
     private raspiConfig: RaspiconfigService,
     private SystemService: SystemService,
     private signalRaspiconfig: SignalsRaspiconfigService
   ) {}
 
   ngOnInit(): void {
-    const upreset = this.signalSettings.settings().upreset;
-    this.SystemService.systemGetPresets(upreset).subscribe(
-      (data) => (this.presets = data)
-    );
+    this.settings.settingsGet().subscribe((rsp) => {
+      this.pilight = (rsp.pilight == true)
+      this.SystemService.systemGetPresets(rsp.upreset).subscribe(
+        (data) => (this.presets = data)
+      );
+    });
 
     let color_uyv = [
       this.signalRaspiconfig.config().at_y,
@@ -53,26 +52,26 @@ export class CameraSettingsComponent implements OnInit {
   }
 
   setPreset(preset: string, fps_divider: number) {
+    let selected_preset: Presets = <Presets>({});
     this.presets.forEach((element) => {
       if (element.name == preset) {
-        this.selected_preset = element;
+        selected_preset = element;
       }
     });
-    this.signalRaspiconfig.config().video_width = this.selected_preset.width;
-    this.signalRaspiconfig.config().video_height = this.selected_preset.height;
-    this.signalRaspiconfig.config().video_fps = this.selected_preset.fps;
-    this.signalRaspiconfig.config().mp4box_fps = this.selected_preset.i_rate;
-    this.signalRaspiconfig.config().image_width = this.selected_preset.i_width;
-    this.signalRaspiconfig.config().image_height =
-      this.selected_preset.i_height;
+    this.signalRaspiconfig.config().video_width = selected_preset.width;
+    this.signalRaspiconfig.config().video_height = selected_preset.height;
+    this.signalRaspiconfig.config().video_fps = selected_preset.fps;
+    this.signalRaspiconfig.config().mp4box_fps = selected_preset.i_rate;
+    this.signalRaspiconfig.config().image_width = selected_preset.i_width;
+    this.signalRaspiconfig.config().image_height =selected_preset.i_height;
 
     this.sendCmd('px', [
-      this.selected_preset.width,
-      this.selected_preset.height,
-      this.selected_preset.fps,
-      this.selected_preset.i_rate,
-      this.selected_preset.i_width,
-      this.selected_preset.i_height,
+      selected_preset.width,
+      selected_preset.height,
+      selected_preset.fps,
+      selected_preset.i_rate,
+      selected_preset.i_width,
+      selected_preset.i_height,
       fps_divider,
     ]);
   }
