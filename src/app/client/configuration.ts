@@ -106,6 +106,17 @@ export class Configuration {
                     : this.accessToken;
             };
         }
+
+        // init default APIKeyQuery credential
+        if (!this.credentials['APIKeyQuery']) {
+            this.credentials['APIKeyQuery'] = () => {
+                if (this.apiKeys === null || this.apiKeys === undefined) {
+                    return undefined;
+                } else {
+                    return this.apiKeys['APIKeyQuery'] || this.apiKeys['cam_token'];
+                }
+            };
+        }
     }
 
     /**

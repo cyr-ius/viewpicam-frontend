@@ -122,6 +122,12 @@ export class CameraService {
             localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
         }
 
+        // authentication (APIKeyQuery) required
+        localVarCredential = this.configuration.lookupCredential('APIKeyQuery');
+        if (localVarCredential) {
+            localVarQueryParameters = localVarQueryParameters.set('cam_token', localVarCredential);
+        }
+
         let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
         if (localVarHttpHeaderAcceptSelected === undefined) {
             // to determine the Accept header
@@ -202,6 +208,12 @@ export class CameraService {
             localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
         }
 
+        // authentication (APIKeyQuery) required
+        localVarCredential = this.configuration.lookupCredential('APIKeyQuery');
+        if (localVarCredential) {
+            localVarQueryParameters = localVarQueryParameters.set('cam_token', localVarCredential);
+        }
+
         let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
         if (localVarHttpHeaderAcceptSelected === undefined) {
             // to determine the Accept header
@@ -261,6 +273,8 @@ export class CameraService {
     public cameraCamPictl(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
     public cameraCamPictl(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
+        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
+
         let localVarHeaders = this.defaultHeaders;
 
         let localVarCredential: string | undefined;
@@ -273,6 +287,12 @@ export class CameraService {
         localVarCredential = this.configuration.lookupCredential('HTTPBearer');
         if (localVarCredential) {
             localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
+        }
+
+        // authentication (APIKeyQuery) required
+        localVarCredential = this.configuration.lookupCredential('APIKeyQuery');
+        if (localVarCredential) {
+            localVarQueryParameters = localVarQueryParameters.set('cam_token', localVarCredential);
         }
 
         let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
@@ -313,6 +333,7 @@ export class CameraService {
         return this.httpClient.request<any>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                params: localVarQueryParameters,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,
