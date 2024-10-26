@@ -1,4 +1,4 @@
-import { Injectable, signal, effect } from '@angular/core';
+import { effect, Injectable, signal } from '@angular/core';
 import { NavigationStart, Router } from '@angular/router';
 
 @Injectable({
