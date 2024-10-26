@@ -5,6 +5,7 @@ export * from './cameraToken';
 export * from './command';
 export * from './commandParamsInner';
 export * from './config';
+export * from './coordinates';
 export * from './dayTime';
 export * from './daysMode';
 export * from './files';

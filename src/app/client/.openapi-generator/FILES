@@ -28,6 +28,7 @@ model/cameraToken.ts
 model/command.ts
 model/commandParamsInner.ts
 model/config.ts
+model/coordinates.ts
 model/dayTime.ts
 model/daysMode.ts
 model/files.ts

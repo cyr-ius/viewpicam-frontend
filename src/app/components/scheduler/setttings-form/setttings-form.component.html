@@ -93,11 +93,11 @@
     <div class="row row-cols-2 row-cols-md-4">
         <div class="col mb-2"><label class="col-form-label-sm"i18n>Latitude</label></div>
         <div class="col">
-            <input class="form-control form-control-sm" type="number" autocomplete="off" name="latitude" step="0.01" [(ngModel)]="settings!.latitude">
+            <input class="form-control form-control-sm" type="number" autocomplete="off" name="latitude" step="0.01" min="-90" max="90" [(ngModel)]="settings!.latitude" (change)="onCoordinatesChange()">
         </div>
         <div class="col mb-2 ps-md-5"><label class="col-form-label-sm"i18n>Longitude</label></div>
         <div class="col">
-            <input class="form-control form-control-sm" type="number" autocomplete="off" name="longitude" step="0.01" [(ngModel)]="settings!.longitude">
+            <input class="form-control form-control-sm" type="number" autocomplete="off" name="longitude" step="0.01" min="-180" max="180" [(ngModel)]="settings!.longitude" (change)="onCoordinatesChange()">
         </div>
     </div>
     <div class="row row-cols-2 row-cols-md-4">

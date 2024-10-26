@@ -2,7 +2,7 @@ import { AsyncPipe } from '@angular/common';
 import { Component, computed, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Observable, tap } from 'rxjs';
-import { ScheduleService } from '../../../client';
+import { Coordinates, ScheduleService } from '../../../client';
 import { SignalsRaspiconfigService } from '../../../core/signals/signals-raspiconfig.service';
 import { SignalsSchedulerService } from '../../../core/signals/signals-scheduler.service';
 
@@ -40,18 +40,27 @@ export class SetttingsFormComponent implements OnInit {
   }
 
   onDayModeChange() {
-    const daymode = +this.scheduler_settings()!.daymode;
     this.schedule.schedulePut(this.scheduler_settings()).subscribe(()=>{
-      this.signalScheduler.setDaymode(daymode);
+      this.signalScheduler.setDaymode(+this.scheduler_settings()!.daymode);
     })
   }
 
   onTimeZoneChange(){
-    const timeszone = this.scheduler_settings().gmt_offset;
     this.schedule.schedulePut(this.scheduler_settings()).subscribe(()=>{
-      this.signalScheduler.setTimezone(timeszone);
+      this.signalScheduler.setTimezone(this.scheduler_settings().gmt_offset);
       this.onDayModeChange();
     })
+  }
+
+  onCoordinatesChange(){
+    let lat = this.scheduler_settings().latitude;
+    let lng = this.scheduler_settings().longitude;
+    this.schedule.schedulePostTimezonefinder(<Coordinates>({longitude:lng,latitude:lat})).subscribe(
+      (rsp) => {
+        this.scheduler_settings().gmt_offset = String(rsp);
+        this.onTimeZoneChange();
+      }
+    )
   }
 
 }
