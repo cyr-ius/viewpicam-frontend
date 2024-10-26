@@ -41,6 +41,17 @@ export class SetttingsFormComponent implements OnInit {
 
   onDayModeChange() {
     const daymode = +this.scheduler_settings()!.daymode;
-    this.signalScheduler.setDaymode(daymode);
+    this.schedule.schedulePut(this.scheduler_settings()).subscribe(()=>{
+      this.signalScheduler.setDaymode(daymode);
+    })
   }
+
+  onTimeZoneChange(){
+    const timeszone = this.scheduler_settings().gmt_offset;
+    this.schedule.schedulePut(this.scheduler_settings()).subscribe(()=>{
+      this.signalScheduler.setTimezone(timeszone);
+      this.onDayModeChange();
+    })
+  }
+
 }

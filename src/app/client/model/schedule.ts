@@ -19,9 +19,9 @@ export interface Schedule {
     daymode: number;
     daystart_minutes: number;
     duskend_minutes: number;
-    gmt_offset?: string | null;
-    latitude?: number | null;
-    longitude?: number | null;
+    gmt_offset: string;
+    latitude: number;
+    longitude: number;
     management_command?: string | null;
     management_interval: number;
     max_capture: number;

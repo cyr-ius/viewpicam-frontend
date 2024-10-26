@@ -25,6 +25,9 @@ export class SignalsSchedulerService {
     purgevideo_hours: 0,
     purgespace_level: 0,
     purgespace_modeex: 0,
+    gmt_offset: "Etc/UTC",
+    latitude:0,
+    longitude: 0
   });
   scheduler_settings = this.schedulerSettings.asReadonly();
 
@@ -35,6 +38,9 @@ export class SignalsSchedulerService {
   daymode = this.dayMode.asReadonly();
   private schedulerState = signal<boolean>(false);
   scheduler_state = this.schedulerState.asReadonly();
+
+  private gmtOffset = signal<string>(this.scheduler_settings().gmt_offset);
+  gmt_offset = this.gmtOffset.asReadonly();
 
   constructor(private schedule: ScheduleService) {}
 
@@ -55,5 +61,9 @@ export class SignalsSchedulerService {
 
   setState(state: boolean) {
     this.schedulerState.set(state);
+  }
+
+  setTimezone(timezone: string) {
+    this.gmtOffset.set(timezone);
   }
 }

@@ -83,7 +83,7 @@
         </div>
         <div class="col mb-2 ps-md-5"><label class="col-form-label-sm"i18n>GMT offset</label></div>
         <div class="col">
-            <select class="form-select form-select-sm" id="gmt_offset" name="gmt_offset" [(ngModel)]="settings!.gmt_offset">
+            <select class="form-select form-select-sm" id="gmt_offset" name="gmt_offset" [(ngModel)]="settings!.gmt_offset" (change)="onTimeZoneChange()">
                 @for (timezone of timezones | async ; track $index) {
                 <option value="{{timezone}}" [selected]="settings!.gmt_offset == timezone">{{timezone}}</option>
                 }

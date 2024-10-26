@@ -1,5 +1,5 @@
 <div class="row row-cols-1 row-cols-md-5 text-center mx-auto mb-2 p-1 border">
-  <span class="col" i18n>Time Offset: <b>{{offset}}</b></span>
+  <span class="col" i18n>Time Offset: <b>{{offset()}}</b></span>
   <span class="col" i18n>Sunrise: <b>{{sunrise | date : 'shortTime'}}</b></span>
   <span class="col" i18n>Sunset: <b>{{sunset | date : 'shortTime' }}</b></span>
   <span id="current_time" class="col" i18n>Current: <b>{{current_time | date : 'shortTime'}}</b></span>
