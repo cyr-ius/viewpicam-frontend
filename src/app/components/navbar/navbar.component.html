@@ -14,9 +14,8 @@
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarToggler" aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
-    @if (user) {
     <div class="collapse navbar-collapse text-center mt-2 mt-md-auto" id="navbarToggler">
-      @if (user!.right == 8 && menu_id() == 'preview' ){
+      @if (user!.right == 8 && (menu_id() == 'preview' || menu_id() == '') ){
         <ul class="navbar-nav" id="main">
           <li class="nav-item"><a class="nav-link" data-bs-toggle="offcanvas" href="#cameraSetting">Camera Settings</a></li>
           @if (motion_mode() == "external") {
@@ -99,7 +98,6 @@
         <li class="nav-item"><a class="nav-link" routerLink="" (click)="onLogout()">Logout ({{user!.name}})</a></li>
       </ul>
     </div>
-    }
   </div>
 </nav>
 <app-modal-upload [hidden]="menu_id() != 'settings'"></app-modal-upload>
