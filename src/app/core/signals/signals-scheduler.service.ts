@@ -1,6 +1,8 @@
-import { Injectable, signal } from '@angular/core';
-import { Schedule, ScheduleService } from '../../client';
+import { effect, Injectable, signal } from '@angular/core';
+import _ from 'lodash';
+import { Schedule, ScheduleService, TasksService } from '../../client';
 import { SchedulerWithCalendars } from '../../client/model/schedulerWithCalendars';
+import { SignalsAuthService } from './signals-auth.service';
 
 @Injectable({
   providedIn: 'root',
@@ -8,27 +10,7 @@ import { SchedulerWithCalendars } from '../../client/model/schedulerWithCalendar
 export class SignalsSchedulerService {
   private schedulerDay = signal<SchedulerWithCalendars[]>([]);
   scheduler_day = this.schedulerDay.asReadonly();
-  private schedulerSettings = signal<Schedule>({
-    autocamera_interval: 0,
-    autocapture_interval: 0,
-    cmd_poll: 0,
-    dawnstart_minutes: 0,
-    dayend_minutes: 0,
-    daymode: 0,
-    daystart_minutes: 0,
-    duskend_minutes: 0,
-    management_interval: 0,
-    max_capture: 0,
-    mode_poll: 0,
-    purgeimage_hours: 0,
-    purgelapse_hours: 0,
-    purgevideo_hours: 0,
-    purgespace_level: 0,
-    purgespace_modeex: 0,
-    gmt_offset: "Etc/UTC",
-    latitude:0,
-    longitude: 0
-  });
+  private schedulerSettings = signal<Schedule>(<Schedule>{});
   scheduler_settings = this.schedulerSettings.asReadonly();
 
   private currentPeriod = signal<string>('');
@@ -39,10 +21,33 @@ export class SignalsSchedulerService {
   private schedulerState = signal<boolean>(false);
   scheduler_state = this.schedulerState.asReadonly();
 
-  private gmtOffset = signal<string>(this.scheduler_settings().gmt_offset);
+  private gmtOffset = signal<string>('', {equal: _.isEqual});
   gmt_offset = this.gmtOffset.asReadonly();
 
-  constructor(private schedule: ScheduleService) {}
+  constructor(
+    private schedule: ScheduleService,
+    private signalAuth: SignalsAuthService,
+    private TasksService: TasksService,
+  ) {
+    effect(() => {
+      if (this.signalAuth.current_user()) {
+        this.schedule.scheduleGet().subscribe(
+          (data)=> {
+            this.setSchedulerSettings(data);
+            this.setTimezone(data.gmt_offset);
+            this.setDaymode(data.daymode);
+          }
+        );
+        this.schedule.scheduleGetSchedulers().subscribe(
+          (data) => this.setSchedulerDay(data)
+        );
+        this.TasksService.tasksStatus().subscribe(
+          (data) => this.setState(data.state)
+        );
+
+      }
+    });
+  }
 
   setDaymode(mode: number) {
     this.dayMode.set(mode);

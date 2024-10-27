@@ -1,7 +1,7 @@
 import { AsyncPipe } from '@angular/common';
 import { Component, computed, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Observable, tap } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Coordinates, ScheduleService } from '../../../client';
 import { SignalsRaspiconfigService } from '../../../core/signals/signals-raspiconfig.service';
 import { SignalsSchedulerService } from '../../../core/signals/signals-scheduler.service';
@@ -28,15 +28,6 @@ export class SetttingsFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.timezones = this.schedule.scheduleGetTimezone();
-    this.schedule
-      .scheduleGet()
-      .pipe(
-        tap((data) => {
-          this.signalScheduler.setSchedulerSettings(data);
-          this.signalScheduler.setDaymode(data.daymode);
-        })
-      )
-      .subscribe();
   }
 
   onDayModeChange() {

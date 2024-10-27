@@ -1,7 +1,7 @@
 import { AsyncPipe, CommonModule } from '@angular/common';
 import { Component, computed, effect, OnInit } from '@angular/core';
 import { interval, Subscription } from 'rxjs';
-import { ScheduleService, TasksService } from '../../../client';
+import { ScheduleService } from '../../../client';
 import { SignalsSchedulerService } from '../../../core/signals/signals-scheduler.service';
 
 @Component({
@@ -19,7 +19,6 @@ export class CurrentStateComponent implements OnInit {
   subscription!: Subscription;
 
   constructor(
-    private TasksService: TasksService,
     private schedule: ScheduleService,
     private signalScheduler: SignalsSchedulerService
   ) {
@@ -40,26 +39,13 @@ export class CurrentStateComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
-    this.schedule
-      .scheduleGetGmtoffset()
-      .subscribe((rsp) => (this.signalScheduler.setTimezone(rsp.gmt_offset)));
-
-    this.TasksService.tasksStatus().subscribe(
-      (data) => this.signalScheduler.setState(data.state)
+    this.subscription = interval(1000).subscribe(
+      () => (this.current_time = new Date(+this.current_time + 1000))
     );
-
-    this.subscription = this.TimeClock()
   }
 
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
-  }
-
-  TimeClock(): Subscription {
-    return interval(1000).subscribe(
-      () => (this.current_time = new Date(+this.current_time + 1000))
-    );
   }
 
 }

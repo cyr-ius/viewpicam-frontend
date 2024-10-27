@@ -1,5 +1,7 @@
 import { effect, Injectable, signal } from '@angular/core';
 import { NavigationStart, Router } from '@angular/router';
+import { SettingsService, SystemService } from '../../client';
+import { SignalsAuthService } from './signals-auth.service';
 
 @Injectable({
   providedIn: 'root',
@@ -27,8 +29,12 @@ export class SignalsSettingsService {
   preview_select_disable = this.previewDisable.asReadonly();
 
   constructor(
-    private router: Router
+    private router: Router,
+    private settingsSvc : SettingsService,
+    private system: SystemService,
+    private signalAuth: SignalsAuthService,
   ) {
+
     let mjpegMode = localStorage.getItem('mjpeg_mode');
     if (mjpegMode) {
       this.setMjpegMode(mjpegMode == 'true' ? true : false);
@@ -43,10 +49,16 @@ export class SignalsSettingsService {
     }
 
     effect(() => {
-      localStorage.setItem(
-        'display_mode',
-        this.display_mode() ? 'true' : 'false'
-      );
+      if (this.signalAuth.current_user()) {
+        this.settingsSvc
+        .settingsGet()
+        .subscribe((rsp) => this.setConfig(rsp));
+        this.system
+        .systemGetVersion()
+        .subscribe((rsp) => this.setVersions(rsp));
+      }
+
+      localStorage.setItem('display_mode', this.display_mode() ? 'true' : 'false');
       localStorage.setItem('mjpeg_mode', this.mjpeg_mode() ? 'true' : 'false');
       localStorage.setItem('color_mode', this.color_mode());
     });

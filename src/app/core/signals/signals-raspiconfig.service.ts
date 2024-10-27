@@ -1,10 +1,12 @@
-import { effect, Injectable, OnInit, signal } from '@angular/core';
+import { effect, Injectable, signal } from '@angular/core';
 import _ from 'lodash';
+import { RaspiconfigService } from '../../client';
+import { SignalsAuthService } from './signals-auth.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class SignalsRaspiconfigService implements OnInit {
+export class SignalsRaspiconfigService {
   private raspiMjpegConfig = signal<any>({});
   config = this.raspiMjpegConfig.asReadonly();
   private motionMode = signal<string>('internal');
@@ -17,16 +19,23 @@ export class SignalsRaspiconfigService implements OnInit {
   private mediaPath = signal<string>('');
   media_path = this.mediaPath.asReadonly();
 
-  constructor() {
+  constructor(
+    private raspiconfig: RaspiconfigService,
+    private signalAuth: SignalsAuthService,
+  ) {
+
     effect(() => {
-      if (this.config() && this.config().media_path) {
-        const mp = this.config().media_path.replace(this.config().base_path,'');
-        this.mediaPath.set(mp)
+      if (this.signalAuth.current_user()) {
+        this.raspiconfig.raspiconfigGet().subscribe(
+          (rsp) => {
+            this.setConfig(rsp);
+            const mp = rsp.media_path.replace(this.config().base_path,'');
+            this.mediaPath.set(mp)
+          }
+        );
+
       }
-    },{ allowSignalWrites: true })
-  }
-  ngOnInit(): void {
-    throw new Error('Method not implemented.');
+    });
   }
 
   setStatus(value: string) {
