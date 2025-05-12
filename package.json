@@ -36,7 +36,7 @@
     "@openapitools/openapi-generator-cli": "^2.20.0",
     "@types/bootstrap": "^5.2.10",
     "@types/event-source-polyfill": "^1.0.5",
-    "@types/jasmine": "~5.1.7",
+    "@types/jasmine": "~5.1.8",
     "@types/lodash": "^4.17.16",
     "jasmine-core": "~5.7.1",
     "karma": "~6.4.0",
