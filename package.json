@@ -31,7 +31,7 @@
   "devDependencies": {
     "@angular-devkit/build-angular": "^19.2.13",
     "@angular/cli": "^19.2.12",
-    "@angular/compiler-cli": "^19.2.11",
+    "@angular/compiler-cli": "^19.2.13",
     "@angular/localize": "^19.2.10",
     "@openapitools/openapi-generator-cli": "^2.20.0",
     "@types/bootstrap": "^5.2.10",
