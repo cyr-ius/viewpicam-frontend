@@ -34,7 +34,7 @@
     "@angular/compiler-cli": "^22.0.0",
     "@angular/localize": "^22.0.1",
     "@openapitools/openapi-generator-cli": "^2.38.0",
-    "@types/bootstrap": "^5.2.10",
+    "@types/bootstrap": "^5.2.11",
     "@types/event-source-polyfill": "^1.0.5",
     "@types/jasmine": "~6.0.0",
     "@types/lodash": "^4.17.24",
