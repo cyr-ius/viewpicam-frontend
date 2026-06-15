@@ -32,7 +32,7 @@
     "@angular-devkit/build-angular": "^21.2.13",
     "@angular/cli": "^22.0.0",
     "@angular/compiler-cli": "^22.0.0",
-    "@angular/localize": "^21.2.15",
+    "@angular/localize": "^22.0.1",
     "@openapitools/openapi-generator-cli": "^2.34.0",
     "@types/bootstrap": "^5.2.10",
     "@types/event-source-polyfill": "^1.0.5",
